@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Midewife Search</string>
+    <string name="action_logout">LogOut</string>
+    <string name="title_activity_login">User Login</string>
+    <string name="title_activity_register">Register User</string>
+    <string name="title_activity_map_request">Make a Request</string>
+</resources>

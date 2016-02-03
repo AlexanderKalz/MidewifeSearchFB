@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:columnCount="2"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:rowCount="14"
+            tools:context="de.drkalz.midewifesearch.Service">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_columnWeight="4"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_row="0"
+        android:text="Angebotene Leistungen:"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_columnWeight="4"
+        android:layout_marginLeft="20dp"
+        android:layout_row="1"
+        android:text="Beleggeburt"
+        android:textColor="#000000"
+        android:textSize="20sp"/>
+
+    <CheckBox
+        android:id="@+id/cb_beleggeburt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_columnWeight="1"
+        android:layout_row="1"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_columnWeight="4"
+        android:layout_marginLeft="20dp"
+        android:layout_row="2"
+        android:text="Geburt HGE"
+        android:textColor="#000000"
+        android:textSize="20sp"/>
+
+    <CheckBox
+        android:id="@+id/cb_geburthge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_columnWeight="1"
+        android:layout_row="2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_columnWeight="4"
+        android:layout_marginLeft="20dp"
+        android:layout_row="3"
+        android:text="Geburtsvorbereitung"
+        android:textColor="#000000"
+        android:textSize="20sp"/>
+
+    <CheckBox
+        android:id="@+id/cb_geburtsvorbereitung"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_columnWeight="1"
+        android:layout_row="3"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_columnWeight="4"
+        android:layout_marginLeft="20dp"
+        android:layout_row="4"
+        android:text="Hausgeburt"
+        android:textColor="#000000"
+        android:textSize="20sp"/>
+
+    <CheckBox
+        android:id="@+id/cb_hausgeburt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_columnWeight="1"
+        android:layout_row="4"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_columnWeight="4"
+        android:layout_marginLeft="20dp"
+        android:layout_row="5"
+        android:text="Rückbildungskurs"
+        android:textColor="#000000"
+        android:textSize="20sp"/>
+
+    <CheckBox
+        android:id="@+id/cb_rueckbildung"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_columnWeight="1"
+        android:layout_row="5"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_columnWeight="4"
+        android:layout_marginLeft="20dp"
+        android:layout_row="6"
+        android:text="Schwangerenvorsorge"
+        android:textColor="#000000"
+        android:textSize="20sp"/>
+
+    <CheckBox
+        android:id="@+id/cb_schwangerenvorsorge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_columnWeight="1"
+        android:layout_row="6"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_columnWeight="4"
+        android:layout_marginLeft="20dp"
+        android:layout_row="7"
+        android:text="Wochenbettbetreueung"
+        android:textColor="#000000"
+        android:textSize="20sp"/>
+
+    <CheckBox
+        android:id="@+id/cb_wochenbett"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_columnWeight="1"
+        android:layout_row="7"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_columnWeight="4"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_row="8"
+        android:text="Sprachen:"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_columnWeight="4"
+        android:layout_marginLeft="20dp"
+        android:layout_row="9"
+        android:text="Englisch"
+        android:textColor="#000000"
+        android:textSize="20sp"/>
+
+    <CheckBox
+        android:id="@+id/cb_englisch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_columnWeight="1"
+        android:layout_row="9"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_columnWeight="4"
+        android:layout_marginLeft="20dp"
+        android:layout_row="10"
+        android:text="Französisch"
+        android:textColor="#000000"
+        android:textSize="20sp"/>
+
+    <CheckBox
+        android:id="@+id/cb_french"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_columnWeight="1"
+        android:layout_row="10"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_columnWeight="4"
+        android:layout_marginLeft="20dp"
+        android:layout_row="11"
+        android:text="Spanisch"
+        android:textColor="#000000"
+        android:textSize="20sp"/>
+
+    <CheckBox
+        android:id="@+id/cb_spanish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_columnWeight="1"
+        android:layout_row="11"/>
+
+    <ImageButton
+        android:id="@+id/ib_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_row="13"
+        android:src="@android:drawable/ic_menu_upload"/>
+
+</GridLayout>

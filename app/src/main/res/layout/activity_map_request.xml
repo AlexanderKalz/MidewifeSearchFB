@@ -1,0 +1,55 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="261dp">
+
+
+        <TextView
+            android:id="@+id/tv_dateOfBirth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_weight="1"
+            android:text="Voraussichtlicher Geburtstermin:"
+            android:textColor="#0022ff"
+            android:textSize="15sp"
+            android:textStyle="italic"/>
+
+        <CalendarView
+            android:id="@+id/cv_dateOfBirth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/tv_dateOfBirth"
+            android:layout_below="@+id/tv_dateOfBirth"
+            />
+
+        <CheckBox
+            android:id="@+id/cb_sendRequest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/cv_dateOfBirth"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="20dp"
+            android:checked="false"
+            android:text="Send Request"
+            />
+
+    </RelativeLayout>
+
+    <fragment android:id="@+id/map"
+              android:name="com.google.android.gms.maps.SupportMapFragment"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              tools:context="de.drkalz.midewifesearch.MapRequest"/>
+
+
+</LinearLayout>
