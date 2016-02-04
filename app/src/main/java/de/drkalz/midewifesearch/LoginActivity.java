@@ -35,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        final StartApplication sApp = StartApplication.getInstance();
 
         final EditText userEmail = (EditText) findViewById(R.id.et_email);
         final EditText userPassword = (EditText) findViewById(R.id.et_password);

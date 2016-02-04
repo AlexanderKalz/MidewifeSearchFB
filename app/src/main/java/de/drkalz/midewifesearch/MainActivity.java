@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -16,9 +15,6 @@ import com.firebase.client.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
-    Boolean isMidwife;
-    AuthData authData;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,29 +22,30 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        isMidwife = false;
+        final StartApplication sApp = StartApplication.getInstance();
+        sApp.setMidwife(false);
 
         Firebase.setAndroidContext(this);
         Firebase ref = new Firebase("https://midwife-search.firebaseio.com/");
 
-        authData = ref.getAuth();
+        sApp.setAuthData(ref.getAuth());
 
-        if (authData != null) {
+        if (sApp.getAuthData() != null) {
             Firebase users = new Firebase("https://midwife-search.firebaseio.com/Users");
-            Query query = users.child(authData.getUid());
+            Query query = users.child(sApp.getAuthData().getUid());
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
                         User currentUser = dataSnapshot.getValue(User.class);
                         if (currentUser.getIsMidwife().equals("false")) {
-                            isMidwife = false;
+                            sApp.setMidwife(false);
                             Intent intent = new Intent(MainActivity.this, MapRequest.class);
-                            intent.putExtra("userUID", authData.getUid());
+                            intent.putExtra("userUID", sApp.getAuthData().getUid());
                             startActivity(intent);
                             finish();
                         } else {
-                            isMidwife = true;
+                            sApp.setMidwife(true);
                         }
                     }
                 }

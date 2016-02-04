@@ -15,7 +15,9 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
+import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.LocationCallback;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -40,6 +42,7 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     private String requesterID;
     private Firebase refRequest;
+    private GeoFire geoFire;
 
     public void createOrUpdateRequest(boolean create) {
 
@@ -47,7 +50,6 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
         newRequest.setRequesterID(requesterID);
         newRequest.setDateOfBirth(newDate);
         newRequest.setMidwifeID("");
-        newRequest.setGeoLocation(new GeoLocation(lat, lng));
 
         if (create) {
             refRequest.push().setValue(newRequest, new Firebase.CompletionListener() {
@@ -56,6 +58,7 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
                     if (firebaseError == null) {
                         Toast.makeText(getApplicationContext(), "Request gesendet", Toast.LENGTH_SHORT).show();
                         requestUID = firebase.getKey();
+                        geoFire.setLocation(requestUID, new GeoLocation(lat, lng));
                     }
                 }
             });
@@ -65,6 +68,7 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
                 public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                     if (firebaseError == null) {
                         Toast.makeText(getApplicationContext(), "Request wurde aktualisiert", Toast.LENGTH_SHORT).show();
+                        geoFire.setLocation(requestUID, new GeoLocation(lat, lng));
                     }
                 }
             });
@@ -86,7 +90,9 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
         sendRequest = (CheckBox) findViewById(R.id.cb_sendRequest);
 
         refRequest = new Firebase("https://midwife-search.firebaseio.com/Request");
-        Query query = refRequest.orderByChild(requesterID).limitToFirst(1);
+        geoFire = new GeoFire(new Firebase("https://midwife-search.firebaseio.com/Location"));
+
+        Query query = refRequest.orderByChild(requesterID).limitToLast(1);
         refRequest.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -95,6 +101,18 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
                         Request knownRequest = snapshot.getValue(Request.class);
                         if (knownRequest.getMidwifeID().isEmpty()) {
                             requestUID = snapshot.getKey();
+                            geoFire.getLocation(requestUID, new LocationCallback() {
+                                @Override
+                                public void onLocationResult(String key, GeoLocation location) {
+                                    lat = location.latitude;
+                                    lng = location.longitude;
+                                }
+
+                                @Override
+                                public void onCancelled(FirebaseError firebaseError) {
+
+                                }
+                            });
                             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy");
                             try {
                                 Date date = sdf.parse(knownRequest.getDateOfBirth());
@@ -172,6 +190,7 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
                     createOrUpdateRequest(false);
                 } else {
                     refRequest.child(requestUID).removeValue();
+                    geoFire.removeLocation(requestUID);
                     Toast.makeText(getApplicationContext(), "Request wurde gelöscht", Toast.LENGTH_SHORT).show();
                     requestUID = "";
                 }
