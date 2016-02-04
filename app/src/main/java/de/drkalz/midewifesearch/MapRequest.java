@@ -115,7 +115,8 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
                             });
                             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy");
                             try {
-                                Date date = sdf.parse(knownRequest.getDateOfBirth());
+                                newDate = knownRequest.getDateOfBirth();
+                                Date date = sdf.parse(newDate);
                                 dateOfBirth.setDate(date.getTime());
                                 sendRequest.setChecked(true);
                             } catch (ParseException e) {
