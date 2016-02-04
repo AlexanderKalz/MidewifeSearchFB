@@ -38,7 +38,6 @@ public class Service extends AppCompatActivity {
                 ServicePortfolio servicePortfolio = new ServicePortfolio();
                 Intent i = getIntent();
 
-                servicePortfolio.setMidWifeID(i.getStringExtra("userUID"));
                 servicePortfolio.setBeleggeburt(cb_belegeburt.isChecked());
                 servicePortfolio.setGeburt_hge(cb_geburthge.isChecked());
                 servicePortfolio.setGeburtsvorbereitung(cb_geburtsvorbereitung.isChecked());
@@ -51,7 +50,8 @@ public class Service extends AppCompatActivity {
                 servicePortfolio.setSpanish(cb_spanish.isChecked());
 
                 Firebase refService = new Firebase("https://midwife-search.firebaseio.com/ServicePortfolio");
-                refService.push().setValue(servicePortfolio, new Firebase.CompletionListener() {
+                refService.child(i.getStringExtra("userUID")).setValue(servicePortfolio,
+                        new Firebase.CompletionListener() {
                     @Override
                     public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                         if (firebaseError == null) {

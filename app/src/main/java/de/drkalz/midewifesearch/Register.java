@@ -116,8 +116,8 @@ public class Register extends AppCompatActivity {
 
                     @Override
                     public void onError(FirebaseError firebaseError) {
-                        Toast.makeText(getApplicationContext(), "Sie wurden NICHT registriert \n" + firebaseError.getDetails()
-                                , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Sie wurden NICHT registriert \n" +
+                                firebaseError.getDetails(), Toast.LENGTH_SHORT).show();
                     }
                 });
 

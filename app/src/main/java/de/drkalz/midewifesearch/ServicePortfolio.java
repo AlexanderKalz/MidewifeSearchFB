@@ -8,7 +8,6 @@ public class ServicePortfolio {
     private boolean beleggeburt, geburtsvorbereitung, geburt_hge, hausgeburt, rueckbildungskurs,
             schwangerenvorsorge, wochenbetreueung,
             german, english, french, spanish;
-    private String midWifeID;
 
     public ServicePortfolio() {
     }
@@ -100,12 +99,5 @@ public class ServicePortfolio {
     public void setWochenbetreueung(boolean wochenbetreueung) {
         this.wochenbetreueung = wochenbetreueung;
     }
-
-    public String getMidWifeID() {
-        return midWifeID;
-    }
-
-    public void setMidWifeID(String midWifeID) {
-        this.midWifeID = midWifeID;
-    }
+    
 }
