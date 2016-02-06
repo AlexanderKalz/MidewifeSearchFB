@@ -1,4 +1,4 @@
-package de.drkalz.midewifesearch;
+package de.drkalz.midewifesearch.Pregnants;
 
 /**
  * Created by Alex on 31.01.16.

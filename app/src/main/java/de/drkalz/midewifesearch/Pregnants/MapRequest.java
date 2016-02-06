@@ -1,4 +1,4 @@
-package de.drkalz.midewifesearch;
+package de.drkalz.midewifesearch.Pregnants;
 
 import android.content.Intent;
 import android.location.Address;
@@ -30,6 +30,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import de.drkalz.midewifesearch.PoJoS.User;
+import de.drkalz.midewifesearch.R;
+
 public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
 
     final String[] address = new String[1];
@@ -38,7 +41,6 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
     Double lat, lng;
     CalendarView dateOfBirth;
     CheckBox sendRequest;
-    User user;
     private GoogleMap mMap;
     private String requesterID;
     private Firebase refRequest;
@@ -90,7 +92,7 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
         sendRequest = (CheckBox) findViewById(R.id.cb_sendRequest);
 
         refRequest = new Firebase("https://midwife-search.firebaseio.com/Request");
-        geoFire = new GeoFire(new Firebase("https://midwife-search.firebaseio.com/Location"));
+        geoFire = new GeoFire(new Firebase("https://midwife-search.firebaseio.com/Location/Requests"));
 
         Query query = refRequest.orderByChild(requesterID).limitToLast(1);
         refRequest.addListenerForSingleValueEvent(new ValueEventListener() {

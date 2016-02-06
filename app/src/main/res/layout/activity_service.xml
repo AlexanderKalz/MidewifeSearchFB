@@ -9,7 +9,7 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin"
             android:rowCount="14"
-            tools:context="de.drkalz.midewifesearch.Service">
+    tools:context=".Midwifes.Service">
 
     <TextView
         android:layout_width="wrap_content"
@@ -228,12 +228,33 @@
         android:layout_columnWeight="1"
         android:layout_row="11"/>
 
+    <TextView
+        android:id="@+id/tv_german"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_columnWeight="4"
+        android:layout_marginLeft="20dp"
+        android:layout_row="12"
+        android:text="Deutsch"
+        android:textColor="#000000"
+        android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/cb_german"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_row="12"
+        android:checked="true" />
+
     <ImageButton
         android:id="@+id/ib_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="1"
+        android:layout_columnWeight="1"
         android:layout_row="13"
-        android:src="@android:drawable/ic_menu_upload"/>
+        android:src="@android:drawable/ic_menu_upload" />
 
 </GridLayout>

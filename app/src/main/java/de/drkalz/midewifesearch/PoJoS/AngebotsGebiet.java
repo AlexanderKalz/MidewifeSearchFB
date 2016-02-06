@@ -1,11 +1,8 @@
-package de.drkalz.midewifesearch;
-
-import com.firebase.geofire.GeoLocation;
+package de.drkalz.midewifesearch.PoJoS;
 
 public class AngebotsGebiet {
     private String midwifeID;
     private Double radiusKM;
-    private GeoLocation mGeoLocation;
 
     public AngebotsGebiet() {
     }
@@ -26,11 +23,4 @@ public class AngebotsGebiet {
         this.radiusKM = radiusKM;
     }
 
-    public GeoLocation getGeoLocation() {
-        return mGeoLocation;
-    }
-
-    public void setGeoLocation(GeoLocation geoLocation) {
-        mGeoLocation = geoLocation;
-    }
 }

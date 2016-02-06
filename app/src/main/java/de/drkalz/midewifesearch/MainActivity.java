@@ -13,6 +13,10 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
+import de.drkalz.midewifesearch.Midwifes.SetBlockedTime;
+import de.drkalz.midewifesearch.PoJoS.User;
+import de.drkalz.midewifesearch.Pregnants.MapRequest;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -46,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
                             finish();
                         } else {
                             sApp.setMidwife(true);
+                            Intent intent = new Intent(MainActivity.this, SetBlockedTime.class);
+                            intent.putExtra("userUID", sApp.getAuthData().getUid());
+                            startActivity(intent);
+                            finish();
                         }
                     }
                 }

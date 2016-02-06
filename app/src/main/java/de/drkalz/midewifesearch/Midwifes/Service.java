@@ -1,4 +1,4 @@
-package de.drkalz.midewifesearch;
+package de.drkalz.midewifesearch.Midwifes;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,9 @@ import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+
+import de.drkalz.midewifesearch.PoJoS.ServicePortfolio;
+import de.drkalz.midewifesearch.R;
 
 public class Service extends AppCompatActivity {
 
@@ -31,12 +34,13 @@ public class Service extends AppCompatActivity {
         final CheckBox cb_english = (CheckBox) findViewById(R.id.cb_englisch);
         final CheckBox cb_french = (CheckBox) findViewById(R.id.cb_french);
         final CheckBox cb_spanish = (CheckBox) findViewById(R.id.cb_spanish);
+        final CheckBox cb_german = (CheckBox) findViewById(R.id.cb_german);
 
         addServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ServicePortfolio servicePortfolio = new ServicePortfolio();
-                Intent i = getIntent();
+                final Intent i = getIntent();
 
                 servicePortfolio.setBeleggeburt(cb_belegeburt.isChecked());
                 servicePortfolio.setGeburt_hge(cb_geburthge.isChecked());
@@ -48,6 +52,7 @@ public class Service extends AppCompatActivity {
                 servicePortfolio.setEnglish(cb_english.isChecked());
                 servicePortfolio.setFrench(cb_french.isChecked());
                 servicePortfolio.setSpanish(cb_spanish.isChecked());
+                servicePortfolio.setGerman(cb_german.isChecked());
 
                 Firebase refService = new Firebase("https://midwife-search.firebaseio.com/ServicePortfolio");
                 refService.child(i.getStringExtra("userUID")).setValue(servicePortfolio,
@@ -56,8 +61,9 @@ public class Service extends AppCompatActivity {
                     public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                         if (firebaseError == null) {
                             Toast.makeText(getApplicationContext(), "Services gespeichert!", Toast.LENGTH_LONG).show();
-                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(i);
+                            Intent intent= new Intent(getApplicationContext(), SetBlockedTime.class);
+                            intent.putExtra("userUID", i.getStringExtra("userUID"));
+                            startActivity(intent);
                         } else {
                             Toast.makeText(getApplicationContext(), "Services NICHT gespechert! \n" + firebaseError.getDetails(),
                                     Toast.LENGTH_LONG).show();
