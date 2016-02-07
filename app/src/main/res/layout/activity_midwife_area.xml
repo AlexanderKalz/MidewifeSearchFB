@@ -1,0 +1,183 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="100">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="50">
+
+        <ListView
+            android:id="@+id/lv_Streets"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" />
+
+        <GridLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_toEndOf="@+id/lv_Streets"
+            android:columnCount="2"
+            android:rowCount="7">
+
+            <TextView
+                android:id="@+id/tv_streetOfArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_row="0"
+                android:text="Straße:"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/et_streetOfArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_marginTop="5dp"
+                android:layout_row="0"
+                android:ems="10"
+                android:inputType="textPostalAddress"
+                android:textColor="#0400ff"
+                android:textSize="16sp"
+                android:typeface="monospace" />
+
+            <TextView
+                android:id="@+id/tv_cityOfArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_row="1"
+                android:text="Stadt:"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/et_cityOfArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_row="1"
+                android:ems="10"
+                android:inputType="textPostalAddress"
+                android:textColor="#0400ff"
+                android:textSize="16sp"
+                android:typeface="monospace" />
+
+            <TextView
+                android:id="@+id/tv_countryOfArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_row="2"
+                android:text="Land:"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/et_countryOfArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_row="2"
+                android:ems="10"
+                android:inputType="textPostalAddress"
+                android:textColor="#0400ff"
+                android:textSize="16sp"
+                android:typeface="monospace" />
+
+            <TextView
+                android:id="@+id/tv_zipOfArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_row="3"
+                android:text="PLZ:"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/et_zipOfArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_row="3"
+                android:ems="10"
+                android:inputType="textPostalAddress"
+                android:textColor="#0400ff"
+                android:textSize="16sp"
+                android:typeface="monospace" />
+
+            <TextView
+                android:id="@+id/tv_radius"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_row="4"
+                android:text="Radius"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/et_radius"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_row="4"
+                android:ems="10"
+                android:inputType="number"
+                android:textColor="#0400ff"
+                android:textSize="16sp"
+                android:typeface="monospace" />
+
+            <ImageButton
+                android:id="@+id/ib_addArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_gravity="center"
+                android:layout_row="5"
+                android:onClick="addArea"
+                android:src="@android:drawable/ic_menu_add"
+                android:tag="1"
+                android:visibility="visible" />
+
+            <ImageButton
+                android:id="@+id/ib_saveArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_gravity="center"
+                android:layout_row="5"
+                android:src="@android:drawable/ic_menu_save"
+                android:tag="2"
+                android:visibility="invisible" />
+
+        </GridLayout>
+    </RelativeLayout>
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="50"
+        tools:context=".Midwifes.MidwifeArea" />
+
+</LinearLayout>

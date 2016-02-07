@@ -1,4 +1,4 @@
-package de.drkalz.midewifesearch.PoJoS;
+package de.drkalz.midewifesearch;
 
 /**
  * Created by Alex on 01.02.16.

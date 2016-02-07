@@ -27,7 +27,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import de.drkalz.midewifesearch.PoJoS.BlockedTime;
 import de.drkalz.midewifesearch.R;
 
 public class SetBlockedTime extends AppCompatActivity {

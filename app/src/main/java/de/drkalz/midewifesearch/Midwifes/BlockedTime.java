@@ -1,4 +1,4 @@
-package de.drkalz.midewifesearch.PoJoS;
+package de.drkalz.midewifesearch.Midwifes;
 
 import java.util.Date;
 

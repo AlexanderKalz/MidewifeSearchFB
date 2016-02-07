@@ -6,6 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -13,11 +17,70 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
+import de.drkalz.midewifesearch.Midwifes.MidwifeArea;
+import de.drkalz.midewifesearch.Midwifes.Service;
 import de.drkalz.midewifesearch.Midwifes.SetBlockedTime;
-import de.drkalz.midewifesearch.PoJoS.User;
 import de.drkalz.midewifesearch.Pregnants.MapRequest;
 
 public class MainActivity extends AppCompatActivity {
+
+    final StartApplication sApp = StartApplication.getInstance();
+    Firebase ref;
+
+    public void doSomeAction(View view) {
+
+        int i = Integer.parseInt(view.getTag().toString());
+
+        switch (i) {
+            case 1:
+                if (sApp.isMidwife()) {
+                    Intent intent = new Intent(MainActivity.this, SetBlockedTime.class);
+                    intent.putExtra("userUID", sApp.getAuthData().getUid());
+                    startActivity(intent);
+                    finish();
+                } else {
+
+                }
+                break;
+            case 2:
+                if (sApp.isMidwife()) {
+                    Intent intent = new Intent(MainActivity.this, MidwifeArea.class);
+                    intent.putExtra("userUID", sApp.getAuthData().getUid());
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(MainActivity.this, MapRequest.class);
+                    intent.putExtra("userUID", sApp.getAuthData().getUid());
+                    startActivity(intent);
+                    finish();
+                }
+                break;
+            case 3:
+                if (sApp.isMidwife()) {
+                    Intent intent = new Intent(MainActivity.this, Service.class);
+                    intent.putExtra("userUID", sApp.getAuthData().getUid());
+                    startActivity(intent);
+                    finish();
+                } else {
+
+                }
+                break;
+
+            case 4:
+                if (sApp.isMidwife()) {
+
+                } else {
+
+                }
+                break;
+            case 5:
+                ref.unauth();
+                sApp.setAuthData(null);
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                break;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +89,17 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final StartApplication sApp = StartApplication.getInstance();
         sApp.setMidwife(false);
 
+        final ImageButton ibArea = (ImageButton) findViewById(R.id.ib_Area);
+        final ImageButton ibTime = (ImageButton) findViewById(R.id.ib_Abwesenheit);
+        final ImageButton ibService = (ImageButton) findViewById(R.id.ib_Service);
+        final ImageButton ibSearch = (ImageButton) findViewById(R.id.ib_search);
+        final Button buLogout = (Button) findViewById(R.id.bu_logout);
+        final TextView tvUser = (TextView) findViewById(R.id.tv_User);
+
         Firebase.setAndroidContext(this);
-        Firebase ref = new Firebase("https://midwife-search.firebaseio.com/");
+        ref = new Firebase("https://midwife-search.firebaseio.com/");
 
         sApp.setAuthData(ref.getAuth());
 
@@ -42,18 +111,11 @@ public class MainActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
                         User currentUser = dataSnapshot.getValue(User.class);
+                        tvUser.setText("- " + currentUser.getFirstname() + " " + currentUser.getLastname() + " -");
                         if (currentUser.getIsMidwife().equals("false")) {
                             sApp.setMidwife(false);
-                            Intent intent = new Intent(MainActivity.this, MapRequest.class);
-                            intent.putExtra("userUID", sApp.getAuthData().getUid());
-                            startActivity(intent);
-                            finish();
                         } else {
                             sApp.setMidwife(true);
-                            Intent intent = new Intent(MainActivity.this, SetBlockedTime.class);
-                            intent.putExtra("userUID", sApp.getAuthData().getUid());
-                            startActivity(intent);
-                            finish();
                         }
                     }
                 }

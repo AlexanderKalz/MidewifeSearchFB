@@ -66,7 +66,6 @@ public class LoginActivity extends AppCompatActivity {
                                     callRegisterActivity(email, password);
                                 }
                             }
-
                             @Override
                             public void onCancelled(FirebaseError firebaseError) {
 

@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
-import de.drkalz.midewifesearch.PoJoS.ServicePortfolio;
+import de.drkalz.midewifesearch.MainActivity;
 import de.drkalz.midewifesearch.R;
 
 public class Service extends AppCompatActivity {
@@ -61,8 +61,7 @@ public class Service extends AppCompatActivity {
                     public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                         if (firebaseError == null) {
                             Toast.makeText(getApplicationContext(), "Services gespeichert!", Toast.LENGTH_LONG).show();
-                            Intent intent= new Intent(getApplicationContext(), SetBlockedTime.class);
-                            intent.putExtra("userUID", i.getStringExtra("userUID"));
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);
                         } else {
                             Toast.makeText(getApplicationContext(), "Services NICHT gespechert! \n" + firebaseError.getDetails(),

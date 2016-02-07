@@ -30,8 +30,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import de.drkalz.midewifesearch.PoJoS.User;
 import de.drkalz.midewifesearch.R;
+import de.drkalz.midewifesearch.User;
 
 public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
 
@@ -109,10 +109,8 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
                                     lat = location.latitude;
                                     lng = location.longitude;
                                 }
-
                                 @Override
                                 public void onCancelled(FirebaseError firebaseError) {
-
                                 }
                             });
                             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy");

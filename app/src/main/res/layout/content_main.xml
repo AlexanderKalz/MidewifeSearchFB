@@ -12,4 +12,118 @@
                 tools:context="de.drkalz.midewifesearch.MainActivity"
                 tools:showIn="@layout/activity_main">
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/welcomeApp"
+        android:textColor="#0022ff"
+        android:textSize="30sp" />
+
+    <ImageButton
+        android:id="@+id/ib_Abwesenheit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_User"
+        android:layout_marginTop="49dp"
+        android:layout_toStartOf="@+id/bu_logout"
+        android:onClick="doSomeAction"
+        android:src="@android:drawable/ic_menu_my_calendar"
+        android:tag="1" />
+
+    <ImageButton
+        android:id="@+id/ib_Area"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ib_Abwesenheit"
+        android:layout_toEndOf="@+id/bu_logout"
+        android:onClick="doSomeAction"
+        android:src="@android:drawable/ic_menu_mapmode"
+        android:tag="2" />
+
+    <ImageButton
+        android:id="@+id/ib_Service"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/ib_Abwesenheit"
+        android:layout_below="@+id/ib_Abwesenheit"
+        android:layout_marginTop="46dp"
+        android:onClick="doSomeAction"
+        android:src="@android:drawable/ic_menu_agenda"
+        android:tag="3" />
+
+    <TextView
+        android:id="@+id/tv_User"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:textColor="#0022ff"
+        android:textSize="20sp" />
+
+    <ImageButton
+        android:id="@+id/ib_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/ib_Area"
+        android:layout_alignTop="@+id/ib_Service"
+        android:onClick="doSomeAction"
+        android:src="@android:drawable/ic_menu_search"
+        android:tag="4" />
+
+    <Button
+        android:id="@+id/bu_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ib_Service"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="98dp"
+        android:onClick="doSomeAction"
+        android:tag="5"
+        android:text="Logout" />
+
+    <TextView
+        android:id="@+id/tv_Abwesenheit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ib_Area"
+        android:layout_alignEnd="@+id/ib_Abwesenheit"
+        android:gravity="center"
+        android:text="Abwesenheiten"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_Area"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tv_Abwesenheit"
+        android:layout_toEndOf="@+id/bu_logout"
+        android:text="Gebiete festlegen"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_Service"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/ib_Service"
+        android:layout_alignTop="@+id/tv_Search"
+        android:text="Service festlegen"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_Search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/ib_search"
+        android:layout_below="@+id/ib_search"
+        android:text="Anfragen suchen"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="12sp" />
+
 </RelativeLayout>
