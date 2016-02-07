@@ -5,32 +5,68 @@
     android:weightSum="100">
 
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="50">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="50"
+        android:orientation="horizontal"
+        android:weightSum="5">
 
         <ListView
             android:id="@+id/lv_Streets"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true" />
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="60dp"
+            android:layout_marginTop="30dp"
+            android:layout_weight="1"
+            android:visibility="visible" />
+
+        <ImageButton
+            android:id="@+id/ib_addArea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:onClick="addArea"
+            android:src="@android:drawable/ic_menu_add"
+            android:tag="1"
+            android:visibility="visible" />
+
+        <ImageButton
+            android:id="@+id/ib_saveArea"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:src="@android:drawable/ic_menu_save"
+            android:tag="2"
+            android:visibility="invisible" />
 
         <GridLayout
-            android:layout_width="fill_parent"
+            android:id="@+id/gl_Area"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
             android:layout_toEndOf="@+id/lv_Streets"
-            android:columnCount="2"
-            android:rowCount="7">
+            android:layout_weight="2"
+            android:columnCount="3"
+            android:rowCount="5"
+            android:visibility="invisible">
 
             <TextView
                 android:id="@+id/tv_streetOfArea"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="0"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:layout_row="0"
                 android:text="Straße:"
                 android:textColor="#000000"
@@ -38,10 +74,10 @@
 
             <EditText
                 android:id="@+id/et_streetOfArea"
-                android:layout_width="match_parent"
+                android:layout_width="284dp"
                 android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_marginTop="5dp"
+                android:layout_column="2"
+                android:layout_marginTop="10dp"
                 android:layout_row="0"
                 android:ems="10"
                 android:inputType="textPostalAddress"
@@ -54,8 +90,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="0"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
                 android:layout_row="1"
                 android:text="Stadt:"
                 android:textColor="#000000"
@@ -63,9 +100,10 @@
 
             <EditText
                 android:id="@+id/et_cityOfArea"
-                android:layout_width="match_parent"
+                android:layout_width="281dp"
                 android:layout_height="wrap_content"
-                android:layout_column="1"
+                android:layout_column="2"
+                android:layout_marginTop="10dp"
                 android:layout_row="1"
                 android:ems="10"
                 android:inputType="textPostalAddress"
@@ -78,8 +116,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="0"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
                 android:layout_row="2"
                 android:text="Land:"
                 android:textColor="#000000"
@@ -87,9 +126,10 @@
 
             <EditText
                 android:id="@+id/et_countryOfArea"
-                android:layout_width="match_parent"
+                android:layout_width="279dp"
                 android:layout_height="wrap_content"
-                android:layout_column="1"
+                android:layout_column="2"
+                android:layout_marginTop="10dp"
                 android:layout_row="2"
                 android:ems="10"
                 android:inputType="textPostalAddress"
@@ -102,8 +142,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="0"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
                 android:layout_row="3"
                 android:text="PLZ:"
                 android:textColor="#000000"
@@ -111,9 +152,10 @@
 
             <EditText
                 android:id="@+id/et_zipOfArea"
-                android:layout_width="match_parent"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:layout_column="1"
+                android:layout_column="2"
+                android:layout_marginTop="10dp"
                 android:layout_row="3"
                 android:ems="10"
                 android:inputType="textPostalAddress"
@@ -126,8 +168,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="0"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
                 android:layout_row="4"
                 android:text="Radius"
                 android:textColor="#000000"
@@ -135,9 +178,10 @@
 
             <EditText
                 android:id="@+id/et_radius"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_column="1"
+                android:layout_column="2"
+                android:layout_marginTop="10dp"
                 android:layout_row="4"
                 android:ems="10"
                 android:inputType="number"
@@ -145,30 +189,8 @@
                 android:textSize="16sp"
                 android:typeface="monospace" />
 
-            <ImageButton
-                android:id="@+id/ib_addArea"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="0"
-                android:layout_gravity="center"
-                android:layout_row="5"
-                android:onClick="addArea"
-                android:src="@android:drawable/ic_menu_add"
-                android:tag="1"
-                android:visibility="visible" />
-
-            <ImageButton
-                android:id="@+id/ib_saveArea"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_gravity="center"
-                android:layout_row="5"
-                android:src="@android:drawable/ic_menu_save"
-                android:tag="2"
-                android:visibility="invisible" />
-
         </GridLayout>
+
     </RelativeLayout>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"

@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">Midewife Search</string>
-    <string name="action_logout">LogOut</string>
-    <string name="title_activity_login">User Login</string>
-    <string name="title_activity_register">Register User</string>
-    <string name="title_activity_map_request">Make a Request</string>
+    <string name="app_name">Midwife Search</string>
+    <string name="action_logout">Abmelden</string>
+    <string name="title_activity_login">Benutzer anmelden</string>
+    <string name="title_activity_register">Benutzer registrieren</string>
+    <string name="title_activity_map_request">Senden Sie eine Anfrage</string>
     <string name="title_activity_set_blocked_time">Abwesenheiten planen</string>
     <string name="welcomeApp">Herzlich Willkommen!</string>
     <string name="title_activity_midwife_area">Wo kann man mich buchen?</string>

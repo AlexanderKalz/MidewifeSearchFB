@@ -1,20 +1,28 @@
 package de.drkalz.midewifesearch.Midwifes;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,16 +36,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.drkalz.midewifesearch.R;
+import de.drkalz.midewifesearch.StartApplication;
 
 public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback {
 
-    ImageButton saveArea, addArea;
+    final StartApplication sApp = StartApplication.getInstance();
+    ImageButton saveButton, addButton;
     Double lat, lng;
     TextView tvStreet, tvCity, tvCountry, tvZip, tvRadius;
     EditText etStreet, etCity, etCountry, etZip, etRadius;
     ListView listView;
+    GridLayout gridLayout;
     ArrayAdapter arrayAdapter;
     ArrayList<String> streetList = new ArrayList<>();
+    ArrayList<String> areaUID = new ArrayList<>();
+    ArrayList<AngebotsGebiet> areaList = new ArrayList<>();
     private GoogleMap mMap;
     private Firebase ref;
     private GeoFire geoFire;
@@ -53,76 +66,96 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
         return zoomLevel;
     }
 
+    protected void switchViews(boolean switchOn) {
+        if (switchOn) {
+            listView.setVisibility(View.INVISIBLE);
+            addButton.setVisibility(View.INVISIBLE);
+            saveButton.setVisibility(View.VISIBLE);
+            gridLayout.setVisibility(View.VISIBLE);
+        } else {
+            listView.setVisibility(View.VISIBLE);
+            addButton.setVisibility(View.VISIBLE);
+            saveButton.setVisibility(View.INVISIBLE);
+            gridLayout.setVisibility(View.INVISIBLE);
+            etStreet.setText("");
+            etCountry.setText("");
+            etCity.setText("");
+            etZip.setText("");
+            etRadius.setText("");
+        }
+    }
+
+    protected void drawLocationCircle(AngebotsGebiet newArea) {
+        String address = newArea.getStreet() + " " + newArea.getCity() + " "
+                + newArea.getCountry() + " " + newArea.getZip();
+
+        Geocoder geoCoder = new Geocoder(getApplicationContext());
+        try {
+            List<Address> addressList = geoCoder.getFromLocationName(address, 1);
+            if (addressList != null && addressList.size() > 0) {
+                lat = addressList.get(0).getLatitude();
+                lng = addressList.get(0).getLongitude();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        LatLng latLng = new LatLng(lat, lng);
+        mMap.addMarker(new MarkerOptions().position(latLng).title(newArea.getStreet()));
+
+        Circle circle = mMap.addCircle(new CircleOptions()
+                .center(new LatLng(lat, lng))
+                .radius(newArea.getRadiusKM())
+                .strokeColor(Color.BLUE));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, getZoomLevel(circle) - 1));
+    }
+
     public void addArea(View view) {
+        switchViews(true);
 
-        saveArea.setVisibility(View.VISIBLE);
-        addArea.setVisibility(View.INVISIBLE);
-        tvStreet.setVisibility(View.VISIBLE);
-        tvCity.setVisibility(View.VISIBLE);
-        tvCountry.setVisibility(View.VISIBLE);
-        tvZip.setVisibility(View.VISIBLE);
-        tvRadius.setVisibility(View.VISIBLE);
-        etStreet.setVisibility(View.VISIBLE);
-        etCity.setVisibility(View.VISIBLE);
-        etCountry.setVisibility(View.VISIBLE);
-        etZip.setVisibility(View.VISIBLE);
-        etRadius.setVisibility(View.VISIBLE);
-
-        saveArea.setOnClickListener(new View.OnClickListener() {
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (etStreet.equals("")) {
+                if (etStreet.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), "Bitte geben Sie einen Straßennahmen + Hausnummer ein.", Toast.LENGTH_LONG).show();
                     return;
-                } else if (etCity.equals("")) {
+                } else if (etCity.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), "Bitte geben Sie eine Stadt ein.", Toast.LENGTH_LONG).show();
                     return;
-                } else if (etCountry.equals("")) {
+                } else if (etCountry.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), "Bitte geben Sie ein Land ein.", Toast.LENGTH_LONG).show();
                     return;
-                } else if (etZip.equals("")) {
+                } else if (etZip.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), "Bitte geben Sie die Postleitzahl ein.", Toast.LENGTH_LONG).show();
                     return;
-                } else if (etRadius.equals("")) {
+                } else if (etRadius.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), "Bitte geben Sie den Radius an, in dem Sie um die o.g. Adresse Anfragen annehmen möchten.",
                             Toast.LENGTH_LONG).show();
                     return;
                 } else {
-                    AngebotsGebiet newArea = new AngebotsGebiet();
-                    newArea.setStreet(etStreet.getText().toString());
-                    newArea.setCity(etCity.getText().toString());
-                    newArea.setCountry(etCountry.getText().toString());
-                    newArea.setZip(etZip.getText().toString());
-                    newArea.setRadiusKM((Double.parseDouble(etRadius.getText().toString())) * 1000.0);
+                    final AngebotsGebiet gebiet = new AngebotsGebiet();
+                    gebiet.setStreet(etStreet.getText().toString());
+                    gebiet.setCity(etCity.getText().toString());
+                    gebiet.setCountry(etCountry.getText().toString());
+                    gebiet.setZip(etZip.getText().toString());
+                    gebiet.setRadiusKM((Double.parseDouble(etRadius.getText().toString())) * 1000.0);
 
-                    String adress = etStreet.getText().toString() + " "
-                            + etCity.getText().toString() + " "
-                            + etCountry.getText().toString() + " "
-                            + etZip.getText().toString();
+                    drawLocationCircle(gebiet);
 
-                    Geocoder geoCoder = new Geocoder(getApplicationContext());
-                    try {
-                        List<Address> addressList = geoCoder.getFromLocationName(adress, 1);
-                        if (addressList != null && addressList.size() > 0) {
-                            lat = addressList.get(0).getLatitude();
-                            lng = addressList.get(0).getLongitude();
+                    ref.child(sApp.getAuthData().getUid()).push().setValue(gebiet, new Firebase.CompletionListener() {
+                        @Override
+                        public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                            if (firebaseError == null) {
+                                areaList.add(gebiet);
+                                areaUID.add(firebase.getKey());
+                                streetList.add(gebiet.getStreet() + ", " + gebiet.getZip() + " " + gebiet.getCity());
+                                geoFire.setLocation(firebase.getKey(), new GeoLocation(lat, lng));
+                                arrayAdapter.notifyDataSetChanged();
+                                switchViews(false);
+                            }
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    LatLng requesterPos = new LatLng(lat, lng);
-                    mMap.addMarker(new MarkerOptions().position(requesterPos).title(newArea.getStreet()));
-
-                    Circle circle = mMap.addCircle(new CircleOptions()
-                            .center(new LatLng(lat, lng))
-                            .radius(newArea.getRadiusKM())
-                            .strokeColor(Color.BLUE));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(requesterPos, getZoomLevel(circle)));
-
-
+                    });
                 }
-
             }
         });
     }
@@ -131,7 +164,6 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_midwife_area);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -149,23 +181,71 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
         etCountry = (EditText) findViewById(R.id.et_countryOfArea);
         etZip = (EditText) findViewById(R.id.et_zipOfArea);
         etRadius = (EditText) findViewById(R.id.et_radius);
-        saveArea = (ImageButton) findViewById(R.id.ib_saveArea);
-        addArea = (ImageButton) findViewById(R.id.ib_addArea);
-
-        tvStreet.setVisibility(View.INVISIBLE);
-        tvCity.setVisibility(View.INVISIBLE);
-        tvCountry.setVisibility(View.INVISIBLE);
-        tvZip.setVisibility(View.INVISIBLE);
-        tvRadius.setVisibility(View.INVISIBLE);
-        etStreet.setVisibility(View.INVISIBLE);
-        etCity.setVisibility(View.INVISIBLE);
-        etCountry.setVisibility(View.INVISIBLE);
-        etZip.setVisibility(View.INVISIBLE);
-        etRadius.setVisibility(View.INVISIBLE);
+        saveButton = (ImageButton) findViewById(R.id.ib_saveArea);
+        addButton = (ImageButton) findViewById(R.id.ib_addArea);
+        gridLayout = (GridLayout) findViewById(R.id.gl_Area);
 
         listView = (ListView) findViewById(R.id.lv_Streets);
+        switchViews(false);
 
+        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, streetList);
+        listView.setAdapter(arrayAdapter);
 
+        ref.child(sApp.getAuthData().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                areaUID.clear();
+                streetList.clear();
+                areaList.clear();
+
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot item : dataSnapshot.getChildren()) {
+                        areaUID.add(item.getKey());
+                        AngebotsGebiet newItem = item.getValue(AngebotsGebiet.class);
+                        streetList.add(newItem.getStreet() + ", " + newItem.getZip() + " " + newItem.getCity());
+                        areaList.add(item.getValue(AngebotsGebiet.class));
+                    }
+                    arrayAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                AngebotsGebiet showItem = areaList.get(position);
+                drawLocationCircle(showItem);
+            }
+        });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
+                alertDialogBuilder.setIcon(android.R.drawable.ic_dialog_info).setTitle("Ändern oder Löschen?")
+                        .setMessage("Möchten Sie den Eintrag ändern oder löschen?")
+                        .setPositiveButton("Ändern", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setNegativeButton("Löschen", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+                return true;
+            }
+        });
     }
 
     @Override
