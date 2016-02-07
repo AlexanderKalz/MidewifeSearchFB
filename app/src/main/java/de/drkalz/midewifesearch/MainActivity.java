@@ -23,7 +23,7 @@ import de.drkalz.midewifesearch.Midwifes.SetBlockedTime;
 import de.drkalz.midewifesearch.Pregnants.MapRequest;
 
 public class MainActivity extends AppCompatActivity {
-// Das ist ein Test, ob Änderungen auch syncronisiert werden.
+    // Das war Quatsch.
     final StartApplication sApp = StartApplication.getInstance();
     Firebase ref;
 
