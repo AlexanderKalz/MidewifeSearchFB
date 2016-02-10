@@ -2,7 +2,7 @@ package de.drkalz.midwifesearch.Midwifes;
 
 public class AngebotsGebiet {
     private String street, city, country, zip, midwifeID;
-    private Double radiusKM;
+    private Double radiusInM;
 
     public AngebotsGebiet() {
     }
@@ -47,11 +47,11 @@ public class AngebotsGebiet {
         this.midwifeID = midwifeID;
     }
 
-    public Double getRadiusKM() {
-        return radiusKM;
+    public Double getRadiusInM() {
+        return radiusInM;
     }
 
-    public void setRadiusKM(Double radiusKM) {
-        this.radiusKM = radiusKM;
+    public void setRadiusInM(Double radiusInM) {
+        this.radiusInM = radiusInM;
     }
 }

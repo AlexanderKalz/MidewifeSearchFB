@@ -107,7 +107,7 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
 
         Circle circle = mMap.addCircle(new CircleOptions()
                 .center(new LatLng(lat, lng))
-                .radius(newArea.getRadiusKM())
+                .radius(newArea.getRadiusInM())
                 .strokeColor(Color.BLUE));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, getZoomLevel(circle) - 1));
     }
@@ -135,7 +135,7 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
                     gebiet.setCity(etCity.getText().toString());
                     gebiet.setCountry(etCountry.getText().toString());
                     gebiet.setZip(etZip.getText().toString());
-                    gebiet.setRadiusKM((Double.parseDouble(etRadius.getText().toString())) * 1000.0);
+                    gebiet.setRadiusInM((Double.parseDouble(etRadius.getText().toString())) * 1000.0);
 
                     drawLocationCircle(gebiet);
 
@@ -148,7 +148,7 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
                                 streetList.add(gebiet.getStreet() + ", "
                                         + gebiet.getZip() + " "
                                         + gebiet.getCity() + "\n Radius: "
-                                        + Double.toString(gebiet.getRadiusKM() / 1000) + " km");
+                                        + Double.toString(gebiet.getRadiusInM() / 1000) + " km");
                                 geoFire.setLocation(firebase.getKey(), new GeoLocation(lat, lng));
                                 arrayAdapter.notifyDataSetChanged();
                                 switchViews(false);
@@ -220,7 +220,7 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
                         streetList.add(newItem.getStreet() + ", "
                                 + newItem.getZip() + " "
                                 + newItem.getCity() + "\n Radius: "
-                                + Double.toString(newItem.getRadiusKM() / 1000) + " km");
+                                + Double.toString(newItem.getRadiusInM() / 1000) + " km");
                         areaList.add(item.getValue(AngebotsGebiet.class));
                     }
                     arrayAdapter.notifyDataSetChanged();
