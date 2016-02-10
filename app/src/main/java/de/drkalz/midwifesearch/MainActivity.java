@@ -1,8 +1,8 @@
-package de.drkalz.midewifesearch;
+package de.drkalz.midwifesearch;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,12 +17,12 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
-import de.drkalz.midewifesearch.Midwifes.MidwifeArea;
-import de.drkalz.midewifesearch.Midwifes.Service;
-import de.drkalz.midewifesearch.Midwifes.SetBlockedTime;
-import de.drkalz.midewifesearch.Pregnants.MapRequest;
+import de.drkalz.midwifesearch.Midwifes.MidwifeArea;
+import de.drkalz.midwifesearch.Midwifes.Service;
+import de.drkalz.midwifesearch.Midwifes.SetBlockedTime;
+import de.drkalz.midwifesearch.Pregnants.MapRequest;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     final StartApplication sApp = StartApplication.getInstance();
     Firebase ref;
@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
             case 5:
                 ref.unauth();
                 sApp.setAuthData(null);
+                sApp.setUserEmail("");
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
                 break;
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //bsetSupportActionBar(toolbar);
 
         sApp.setMidwife(false);
 
@@ -112,7 +113,8 @@ public class MainActivity extends AppCompatActivity {
                     if (dataSnapshot.exists()) {
                         User currentUser = dataSnapshot.getValue(User.class);
                         tvUser.setText("- " + currentUser.getFirstname() + " " + currentUser.getLastname() + " -");
-                        if (currentUser.getIsMidwife().equals("false")) {
+                        sApp.setUserEmail(currentUser.geteMail());
+                        if (currentUser.getIsMidwife() == false) {
                             sApp.setMidwife(false);
                         } else {
                             sApp.setMidwife(true);

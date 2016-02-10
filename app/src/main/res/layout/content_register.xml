@@ -11,7 +11,7 @@
             android:paddingTop="@dimen/activity_vertical_margin"
             android:rowCount="12"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:context="de.drkalz.midewifesearch.Register"
+            tools:context="de.drkalz.midwifesearch.Register"
             tools:showIn="@layout/activity_register">
 
     <TextView

@@ -1,4 +1,4 @@
-package de.drkalz.midewifesearch.Midwifes;
+package de.drkalz.midwifesearch.Midwifes;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,8 +11,8 @@ import android.widget.Toast;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
-import de.drkalz.midewifesearch.MainActivity;
-import de.drkalz.midewifesearch.R;
+import de.drkalz.midwifesearch.MainActivity;
+import de.drkalz.midwifesearch.R;
 
 public class Service extends AppCompatActivity {
 

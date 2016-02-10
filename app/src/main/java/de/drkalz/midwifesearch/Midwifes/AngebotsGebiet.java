@@ -1,7 +1,7 @@
-package de.drkalz.midewifesearch.Midwifes;
+package de.drkalz.midwifesearch.Midwifes;
 
 public class AngebotsGebiet {
-    private String street, city, country, zip;
+    private String street, city, country, zip, midwifeID;
     private Double radiusKM;
 
     public AngebotsGebiet() {
@@ -37,6 +37,14 @@ public class AngebotsGebiet {
 
     public void setZip(String zip) {
         this.zip = zip;
+    }
+
+    public String getMidwifeID() {
+        return midwifeID;
+    }
+
+    public void setMidwifeID(String midwifeID) {
+        this.midwifeID = midwifeID;
     }
 
     public Double getRadiusKM() {

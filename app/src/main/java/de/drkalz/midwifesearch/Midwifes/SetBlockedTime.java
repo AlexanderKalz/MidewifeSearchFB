@@ -1,4 +1,4 @@
-package de.drkalz.midewifesearch.Midwifes;
+package de.drkalz.midwifesearch.Midwifes;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -27,7 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import de.drkalz.midewifesearch.R;
+import de.drkalz.midwifesearch.R;
 
 public class SetBlockedTime extends AppCompatActivity {
 

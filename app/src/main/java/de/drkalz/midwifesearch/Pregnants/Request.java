@@ -1,22 +1,23 @@
-package de.drkalz.midewifesearch.Pregnants;
+package de.drkalz.midwifesearch.Pregnants;
+
+import java.util.Date;
 
 /**
  * Created by Alex on 31.01.16.
  */
 public class Request {
 
-    private String dateOfBirth;
+    private Date dateOfBirth;
     private String midwifeID;
-    private String requesterID;
 
     public Request() {
     }
 
-    public String getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -28,11 +29,4 @@ public class Request {
         this.midwifeID = midwifeID;
     }
 
-    public String getRequesterID() {
-        return requesterID;
-    }
-
-    public void setRequesterID(String requesterID) {
-        this.requesterID = requesterID;
-    }
 }

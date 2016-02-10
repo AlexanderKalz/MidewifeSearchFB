@@ -1,4 +1,4 @@
-package de.drkalz.midewifesearch;
+package de.drkalz.midwifesearch;
 
 import org.junit.Test;
 

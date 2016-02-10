@@ -1,4 +1,4 @@
-package de.drkalz.midewifesearch.Midwifes;
+package de.drkalz.midwifesearch.Midwifes;
 
 /**
  * Created by Alex on 30.01.16.

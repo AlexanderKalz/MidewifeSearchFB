@@ -1,4 +1,4 @@
-package de.drkalz.midewifesearch;
+package de.drkalz.midwifesearch;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ import com.firebase.client.FirebaseError;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.drkalz.midewifesearch.Midwifes.Service;
+import de.drkalz.midwifesearch.Midwifes.Service;
 
 public class Register extends AppCompatActivity {
 
@@ -137,6 +137,7 @@ public class Register extends AppCompatActivity {
                         newUser.put("mobil", cuMobil.getText().toString());
                         newUser.put("homepage", cuHomepage.getText().toString());
                         newUser.put("isMidwife", isMidwife[0].toString());
+                        newUser.put("eMail", cuEmail.getText().toString());
 
                         ref.child("Users").child(authData.getUid()).setValue(newUser);
 

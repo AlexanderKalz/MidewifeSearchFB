@@ -1,4 +1,4 @@
-package de.drkalz.midewifesearch.Pregnants;
+package de.drkalz.midwifesearch.Pregnants;
 
 import android.content.Intent;
 import android.location.Address;
@@ -30,14 +30,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import de.drkalz.midewifesearch.R;
-import de.drkalz.midewifesearch.User;
+import de.drkalz.midwifesearch.R;
+import de.drkalz.midwifesearch.User;
 
 public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
 
     final String[] address = new String[1];
-    public String newDate;
-    public String requestUID;
+    Date newDate;
     Double lat, lng;
     CalendarView dateOfBirth;
     CheckBox sendRequest;
@@ -46,35 +45,21 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
     private Firebase refRequest;
     private GeoFire geoFire;
 
-    public void createOrUpdateRequest(boolean create) {
+    public void saveRequest() {
 
         Request newRequest = new Request();
-        newRequest.setRequesterID(requesterID);
         newRequest.setDateOfBirth(newDate);
         newRequest.setMidwifeID("");
 
-        if (create) {
-            refRequest.push().setValue(newRequest, new Firebase.CompletionListener() {
+        refRequest.child(requesterID).setValue(newRequest, new Firebase.CompletionListener() {
                 @Override
                 public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                     if (firebaseError == null) {
                         Toast.makeText(getApplicationContext(), "Request gesendet", Toast.LENGTH_SHORT).show();
-                        requestUID = firebase.getKey();
-                        geoFire.setLocation(requestUID, new GeoLocation(lat, lng));
+                        geoFire.setLocation(requesterID, new GeoLocation(lat, lng));
                     }
                 }
             });
-        } else {
-            refRequest.child(requestUID).setValue(newRequest, new Firebase.CompletionListener() {
-                @Override
-                public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-                    if (firebaseError == null) {
-                        Toast.makeText(getApplicationContext(), "Request wurde aktualisiert", Toast.LENGTH_SHORT).show();
-                        geoFire.setLocation(requestUID, new GeoLocation(lat, lng));
-                    }
-                }
-            });
-        }
     }
 
     @Override
@@ -84,7 +69,6 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
 
         Intent i = getIntent();
         requesterID = i.getStringExtra("userUID");
-        requestUID = "";
         lat = 0.0;
         lng = 0.0;
 
@@ -102,26 +86,21 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Request knownRequest = snapshot.getValue(Request.class);
                         if (knownRequest.getMidwifeID().isEmpty()) {
-                            requestUID = snapshot.getKey();
-                            geoFire.getLocation(requestUID, new LocationCallback() {
+                            geoFire.getLocation(requesterID, new LocationCallback() {
                                 @Override
                                 public void onLocationResult(String key, GeoLocation location) {
                                     lat = location.latitude;
                                     lng = location.longitude;
                                 }
+
                                 @Override
                                 public void onCancelled(FirebaseError firebaseError) {
                                 }
                             });
-                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy");
-                            try {
-                                newDate = knownRequest.getDateOfBirth();
-                                Date date = sdf.parse(newDate);
-                                dateOfBirth.setDate(date.getTime());
-                                sendRequest.setChecked(true);
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
+
+                            newDate = knownRequest.getDateOfBirth();
+                            dateOfBirth.setDate(knownRequest.getDateOfBirth().getTime());
+                            sendRequest.setChecked(true);
                         }
                     }
                 }
@@ -129,7 +108,6 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
             }
         });
 
@@ -155,10 +133,8 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-                    LatLng requesterPos = new LatLng(lat, lng);
-                    mMap.addMarker(new MarkerOptions().position(requesterPos));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(requesterPos, 12));
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).title("Mein Standort"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 12));
                 }
             }
 
@@ -171,13 +147,17 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
         dateOfBirth.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                newDate = String.valueOf(dayOfMonth) + "/"
-                        + String.valueOf(month + 1) + "/"
-                        + String.valueOf(year);
-                if (sendRequest.isChecked() && !requestUID.isEmpty()) {
-                    createOrUpdateRequest(false);
-                } else if (sendRequest.isChecked() && !requestUID.isEmpty()) {
-                    createOrUpdateRequest(true);
+                String puffer = String.valueOf(dayOfMonth) + "/" + String.valueOf(month)
+                        + "/" + String.valueOf(year);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                try {
+                    newDate = dateFormat.parse(puffer);
+                } catch (ParseException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                if (sendRequest.isChecked()) {
+                    saveRequest();
                 }
             }
         });
@@ -185,15 +165,12 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
         sendRequest.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked && requestUID.isEmpty()) {
-                    createOrUpdateRequest(true);
-                } else if (isChecked && !requestUID.isEmpty()) {
-                    createOrUpdateRequest(false);
+                if (isChecked) {
+                    saveRequest();
                 } else {
-                    refRequest.child(requestUID).removeValue();
-                    geoFire.removeLocation(requestUID);
+                    refRequest.child(requesterID).removeValue();
+                    geoFire.removeLocation(requesterID);
                     Toast.makeText(getApplicationContext(), "Request wurde gelöscht", Toast.LENGTH_SHORT).show();
-                    requestUID = "";
                 }
             }
         });

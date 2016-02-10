@@ -1,47 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.drkalz.midewifesearch">
+<manifest package="de.drkalz.midwifesearch"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
-        android:name="de.drkalz.midewifesearch.StartApplication"
+        android:name=".StartApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Theme.AppCompat.Light">
         <activity
-            android:name="de.drkalz.midewifesearch.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="de.drkalz.midewifesearch.LoginActivity"
+            android:name=".LoginActivity"
             android:label="@string/title_activity_login"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.drkalz.midewifesearch.MainActivity" />
+                android:value="de.drkalz.midwifesearch.MainActivity"/>
         </activity>
         <activity
-            android:name="de.drkalz.midewifesearch.Register"
+            android:name=".Register"
             android:label="@string/title_activity_register"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.drkalz.midewifesearch.MainActivity" />
+                android:value="de.drkalz.midwifesearch.MainActivity"/>
         </activity>
         <activity
-            android:name="de.drkalz.midewifesearch.Midwifes.Service"
+            android:name=".Midwifes.Service"
             android:label="Service Portfolio" />
 
         <meta-data
@@ -49,29 +50,28 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name="de.drkalz.midewifesearch.Pregnants.MapRequest"
+            android:name=".Pregnants.MapRequest"
             android:label="@string/title_activity_map_request">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.drkalz.midewifesearch.MainActivity" />
+                android:value="de.drkalz.midwifesearch.MainActivity"/>
         </activity>
         <activity
-            android:name="de.drkalz.midewifesearch.Midwifes.SetBlockedTime"
+            android:name=".Midwifes.SetBlockedTime"
             android:label="@string/title_activity_set_blocked_time"
             android:parentActivityName=".Midwifes.Service"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.drkalz.midewifesearch.MainActivity" />
+                android:value="de.drkalz.midwifesearch.MainActivity"/>
         </activity>
         <activity
-            android:name="de.drkalz.midewifesearch.Midwifes.MidwifeArea"
+            android:name=".Midwifes.MidwifeArea"
             android:label="@string/title_activity_midwife_area"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="de.drkalz.midewifesearch.MainActivity" />
+                android:value="de.drkalz.midwifesearch.MainActivity"/>
         </activity>
     </application>
-
 </manifest>

@@ -1,12 +1,10 @@
-package de.drkalz.midewifesearch.Midwifes;
+package de.drkalz.midwifesearch.Midwifes;
 
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,6 +12,7 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,13 +29,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import de.drkalz.midewifesearch.R;
-import de.drkalz.midewifesearch.StartApplication;
+import de.drkalz.midwifesearch.R;
+import de.drkalz.midwifesearch.StartApplication;
 
 public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback {
 
@@ -47,9 +47,11 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
     EditText etStreet, etCity, etCountry, etZip, etRadius;
     ListView listView;
     GridLayout gridLayout;
+    RelativeLayout rlChangeDeleteArea;
     ArrayAdapter arrayAdapter;
     ArrayList<String> streetList = new ArrayList<>();
     ArrayList<String> areaUID = new ArrayList<>();
+    ArrayList<Marker> markerList = new ArrayList<>();
     ArrayList<AngebotsGebiet> areaList = new ArrayList<>();
     private GoogleMap mMap;
     private Firebase ref;
@@ -77,6 +79,7 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
             addButton.setVisibility(View.VISIBLE);
             saveButton.setVisibility(View.INVISIBLE);
             gridLayout.setVisibility(View.INVISIBLE);
+            rlChangeDeleteArea.setVisibility(View.INVISIBLE);
             etStreet.setText("");
             etCountry.setText("");
             etCity.setText("");
@@ -101,7 +104,7 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
         }
 
         LatLng latLng = new LatLng(lat, lng);
-        mMap.addMarker(new MarkerOptions().position(latLng).title(newArea.getStreet()));
+        Marker marker = mMap.addMarker(new MarkerOptions().position(latLng).title(newArea.getStreet()));
 
         Circle circle = mMap.addCircle(new CircleOptions()
                 .center(new LatLng(lat, lng))
@@ -148,7 +151,10 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
                             if (firebaseError == null) {
                                 areaList.add(gebiet);
                                 areaUID.add(firebase.getKey());
-                                streetList.add(gebiet.getStreet() + ", " + gebiet.getZip() + " " + gebiet.getCity());
+                                streetList.add(gebiet.getStreet() + ", "
+                                        + gebiet.getZip() + " "
+                                        + gebiet.getCity() + "\n Radius: "
+                                        + Double.toString(gebiet.getRadiusKM() / 1000) + " km");
                                 geoFire.setLocation(firebase.getKey(), new GeoLocation(lat, lng));
                                 arrayAdapter.notifyDataSetChanged();
                                 switchViews(false);
@@ -158,6 +164,21 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
                 }
             }
         });
+    }
+
+    protected void changeDeleteArea(View view) {
+        int i = Integer.parseInt(view.getTag().toString());
+
+        switch (i) {
+            case 20:
+
+                break;
+            case 21:
+
+                break;
+        }
+
+        switchViews(false);
     }
 
     @Override
@@ -184,6 +205,7 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
         saveButton = (ImageButton) findViewById(R.id.ib_saveArea);
         addButton = (ImageButton) findViewById(R.id.ib_addArea);
         gridLayout = (GridLayout) findViewById(R.id.gl_Area);
+        rlChangeDeleteArea = (RelativeLayout) findViewById(R.id.rl_ChangeDeleteArea);
 
         listView = (ListView) findViewById(R.id.lv_Streets);
         switchViews(false);
@@ -202,7 +224,10 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
                     for (DataSnapshot item : dataSnapshot.getChildren()) {
                         areaUID.add(item.getKey());
                         AngebotsGebiet newItem = item.getValue(AngebotsGebiet.class);
-                        streetList.add(newItem.getStreet() + ", " + newItem.getZip() + " " + newItem.getCity());
+                        streetList.add(newItem.getStreet() + ", "
+                                + newItem.getZip() + " "
+                                + newItem.getCity() + "\n Radius: "
+                                + Double.toString(newItem.getRadiusKM() / 1000) + " km");
                         areaList.add(item.getValue(AngebotsGebiet.class));
                     }
                     arrayAdapter.notifyDataSetChanged();
@@ -226,23 +251,9 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getApplicationContext());
-                alertDialogBuilder.setIcon(android.R.drawable.ic_dialog_info).setTitle("Ändern oder Löschen?")
-                        .setMessage("Möchten Sie den Eintrag ändern oder löschen?")
-                        .setPositiveButton("Ändern", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
-                        .setNegativeButton("Löschen", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
+                rlChangeDeleteArea.setVisibility(View.VISIBLE);
+                listView.setVisibility(View.INVISIBLE);
+                addButton.setVisibility(View.INVISIBLE);
                 return true;
             }
         });

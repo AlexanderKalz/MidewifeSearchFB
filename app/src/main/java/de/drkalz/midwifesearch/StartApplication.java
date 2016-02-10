@@ -1,4 +1,4 @@
-package de.drkalz.midewifesearch;
+package de.drkalz.midwifesearch;
 
 import android.app.Application;
 
@@ -12,6 +12,7 @@ public class StartApplication extends Application {
     private static StartApplication singleInstance = null;
     private boolean isMidwife;
     private AuthData authData;
+    private String userEmail;
 
     public static StartApplication getInstance() {
         return singleInstance;
@@ -31,6 +32,14 @@ public class StartApplication extends Application {
 
     public void setAuthData(AuthData authData) {
         this.authData = authData;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     @Override

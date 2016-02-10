@@ -1,4 +1,4 @@
-package de.drkalz.midewifesearch;
+package de.drkalz.midwifesearch;
 
 /**
  * Created by Alex on 01.02.16.
@@ -14,7 +14,8 @@ public class User {
     private String telefon;
     private String mobil;
     private String zip;
-    private String isMidwife;
+    private Boolean isMidwife;
+    private String eMail;
 
     public User() {
     }
@@ -55,7 +56,12 @@ public class User {
         return zip;
     }
 
-    public String getIsMidwife() {
+    public boolean getIsMidwife() {
         return isMidwife;
     }
+
+    public String geteMail() {
+        return eMail;
+    }
+
 }

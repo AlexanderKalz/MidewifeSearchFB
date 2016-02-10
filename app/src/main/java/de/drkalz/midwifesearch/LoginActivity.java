@@ -1,4 +1,4 @@
-package de.drkalz.midewifesearch;
+package de.drkalz.midwifesearch;
 
 import android.content.Intent;
 import android.os.Bundle;
