@@ -64,8 +64,7 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
             double scale = radius / 500;
             zoom = (int) (16 - Math.log(scale) / Math.log(2));
         }
-        int zoomLevel = zoom;
-        return zoomLevel;
+        return zoom;
     }
 
     protected void switchViews(boolean switchOn) {
@@ -121,20 +120,15 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
             public void onClick(View v) {
                 if (etStreet.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), "Bitte geben Sie einen Straßennahmen + Hausnummer ein.", Toast.LENGTH_LONG).show();
-                    return;
                 } else if (etCity.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), "Bitte geben Sie eine Stadt ein.", Toast.LENGTH_LONG).show();
-                    return;
                 } else if (etCountry.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), "Bitte geben Sie ein Land ein.", Toast.LENGTH_LONG).show();
-                    return;
                 } else if (etZip.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), "Bitte geben Sie die Postleitzahl ein.", Toast.LENGTH_LONG).show();
-                    return;
                 } else if (etRadius.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), "Bitte geben Sie den Radius an, in dem Sie um die o.g. Adresse Anfragen annehmen möchten.",
                             Toast.LENGTH_LONG).show();
-                    return;
                 } else {
                     final AngebotsGebiet gebiet = new AngebotsGebiet();
                     gebiet.setStreet(etStreet.getText().toString());
@@ -177,7 +171,6 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
 
                 break;
         }
-
         switchViews(false);
     }
 
