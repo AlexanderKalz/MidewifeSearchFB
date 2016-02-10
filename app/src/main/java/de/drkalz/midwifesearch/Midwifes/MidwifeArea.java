@@ -189,7 +189,7 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        ref = new Firebase("https://midwife-search.firebaseio.com/MidewifeArea");
+        ref = new Firebase("https://midwife-search.firebaseio.com/MidwifeArea");
         geoFire = new GeoFire(new Firebase("https://midwife-search.firebaseio.com/Location/Areas"));
 
         tvStreet = (TextView) findViewById(R.id.tv_streetOfArea);
