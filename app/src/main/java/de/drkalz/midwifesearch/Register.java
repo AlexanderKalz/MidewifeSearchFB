@@ -15,10 +15,10 @@ import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import de.drkalz.midwifesearch.Midwifes.Service;
+import de.drkalz.midwifesearch.Pregnants.MapRequest;
 
 public class Register extends AppCompatActivity {
 
@@ -118,26 +118,24 @@ public class Register extends AppCompatActivity {
 
                     @Override
                     public void onError(FirebaseError firebaseError) {
-                        Toast.makeText(getApplicationContext(), "Sie wurden NICHT registriert \n" +
-                                firebaseError.getDetails(), Toast.LENGTH_SHORT).show();
                     }
                 });
 
                 ref.authWithPassword(eMail, passWord, new Firebase.AuthResultHandler() {
                     @Override
                     public void onAuthenticated(AuthData authData) {
-                        Map<String, String> newUser = new HashMap<>();
-                        newUser.put("firstname", cuFirstname.getText().toString());
-                        newUser.put("lastname", cuName.getText().toString());
-                        newUser.put("street", cuStreet.getText().toString());
-                        newUser.put("city", cuCity.getText().toString());
-                        newUser.put("country", cuCountry.getText().toString());
-                        newUser.put("zip", cuZip.getText().toString());
-                        newUser.put("telefon", cuTelefon.getText().toString());
-                        newUser.put("mobil", cuMobil.getText().toString());
-                        newUser.put("homepage", cuHomepage.getText().toString());
-                        newUser.put("isMidwife", isMidwife[0].toString());
-                        newUser.put("eMail", cuEmail.getText().toString());
+                        User newUser = new User();
+                        newUser.setFirstname(cuFirstname.getText().toString());
+                        newUser.setLastname(cuName.getText().toString());
+                        newUser.setStreet(cuStreet.getText().toString());
+                        newUser.setCity(cuCity.getText().toString());
+                        newUser.setCountry(cuCountry.getText().toString());
+                        newUser.setZip(cuZip.getText().toString());
+                        newUser.setTelefon(cuTelefon.getText().toString());
+                        newUser.setMobil(cuMobil.getText().toString());
+                        newUser.setHomepage(cuHomepage.getText().toString());
+                        newUser.setMidwife(isMidwife[0]);
+                        newUser.seteMail(cuEmail.getText().toString());
 
                         ref.child("Users").child(authData.getUid()).setValue(newUser);
 
@@ -147,7 +145,8 @@ public class Register extends AppCompatActivity {
                             startActivity(i);
                             finish();
                         } else {
-                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                            Intent i = new Intent(getApplicationContext(), MapRequest.class);
+                            i.putExtra("userUID", authData.getUid());
                             startActivity(i);
                             finish();
                         }
@@ -155,13 +154,9 @@ public class Register extends AppCompatActivity {
 
                     @Override
                     public void onAuthenticationError(FirebaseError firebaseError) {
-
                     }
                 });
-
-
             }
         });
     }
-
 }
