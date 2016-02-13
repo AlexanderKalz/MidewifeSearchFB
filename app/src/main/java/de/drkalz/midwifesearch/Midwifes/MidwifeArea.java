@@ -29,7 +29,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -43,6 +42,7 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
     final StartApplication sApp = StartApplication.getInstance();
     ImageButton saveButton, addButton;
     Double lat, lng;
+    int positionOfItem;
     TextView tvStreet, tvCity, tvCountry, tvZip, tvRadius;
     EditText etStreet, etCity, etCountry, etZip, etRadius;
     ListView listView;
@@ -51,7 +51,6 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
     ArrayAdapter arrayAdapter;
     ArrayList<String> streetList = new ArrayList<>();
     ArrayList<String> areaUID = new ArrayList<>();
-    ArrayList<Marker> markerList = new ArrayList<>();
     ArrayList<AngebotsGebiet> areaList = new ArrayList<>();
     private GoogleMap mMap;
     private Firebase ref;
@@ -103,7 +102,7 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
         }
 
         LatLng latLng = new LatLng(lat, lng);
-        Marker marker = mMap.addMarker(new MarkerOptions().position(latLng).title(newArea.getStreet()));
+        mMap.addMarker(new MarkerOptions().position(latLng).title(newArea.getStreet()));
 
         Circle circle = mMap.addCircle(new CircleOptions()
                 .center(new LatLng(lat, lng))
@@ -112,9 +111,24 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, getZoomLevel(circle) - 1));
     }
 
-    public void addArea(View view) {
+    public void addArea(View view, final AngebotsGebiet gebiet) {
+
+        boolean addOrUpdate;
+
+        addOrUpdate = true;
+
+        if (gebiet != null) {
+            etStreet.setText(gebiet.getStreet());
+            etCity.setText(gebiet.getCity());
+            etCountry.setText(gebiet.getCountry());
+            etZip.setText(gebiet.getZip());
+            etRadius.setText(String.valueOf(gebiet.getRadiusInM() / 1000));
+            addOrUpdate = false;
+        }
+
         switchViews(true);
 
+        final boolean finalAddOrUpdate = addOrUpdate;
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,7 +144,6 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
                     Toast.makeText(getApplicationContext(), "Bitte geben Sie den Radius an, in dem Sie um die o.g. Adresse Anfragen annehmen möchten.",
                             Toast.LENGTH_LONG).show();
                 } else {
-                    final AngebotsGebiet gebiet = new AngebotsGebiet();
                     gebiet.setStreet(etStreet.getText().toString());
                     gebiet.setCity(etCity.getText().toString());
                     gebiet.setCountry(etCountry.getText().toString());
@@ -139,36 +152,47 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
 
                     drawLocationCircle(gebiet);
 
-                    ref.child(sApp.getAuthData().getUid()).push().setValue(gebiet, new Firebase.CompletionListener() {
-                        @Override
-                        public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-                            if (firebaseError == null) {
-                                areaList.add(gebiet);
-                                areaUID.add(firebase.getKey());
-                                streetList.add(gebiet.getStreet() + ", "
-                                        + gebiet.getZip() + " "
-                                        + gebiet.getCity() + "\n Radius: "
-                                        + Double.toString(gebiet.getRadiusInM() / 1000) + " km");
-                                geoFire.setLocation(firebase.getKey(), new GeoLocation(lat, lng));
-                                arrayAdapter.notifyDataSetChanged();
-                                switchViews(false);
+                    if (finalAddOrUpdate) {
+                        ref.child(sApp.getAuthData().getUid()).push().setValue(gebiet, new Firebase.CompletionListener() {
+                            @Override
+                            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                                if (firebaseError == null) {
+                                    areaList.add(gebiet);
+                                    areaUID.add(firebase.getKey());
+                                    streetList.add(gebiet.getStreet() + ", "
+                                            + gebiet.getZip() + " "
+                                            + gebiet.getCity() + "\nRadius: "
+                                            + Double.toString(gebiet.getRadiusInM() / 1000) + " km");
+                                    geoFire.setLocation(firebase.getKey(), new GeoLocation(lat, lng));
+                                    arrayAdapter.notifyDataSetChanged();
+                                    switchViews(false);
+                                }
                             }
-                        }
-                    });
+                        });
+                    } else {
+                        Firebase updateRef = ref.child(sApp.getAuthData().getUid());
+                        updateRef.child(areaUID.get(positionOfItem)).setValue(gebiet);
+                        switchViews(false);
+                    }
                 }
             }
         });
     }
 
-    protected void changeDeleteArea(View view) {
+    protected void deleteArea(View view) {
         int i = Integer.parseInt(view.getTag().toString());
-
+        Firebase changeRef = ref.child(sApp.getAuthData().getUid());
         switch (i) {
             case 20:
-
+                rlChangeDeleteArea.setVisibility(View.INVISIBLE);
+                changeRef.child(areaUID.get(positionOfItem)).removeValue();
+                geoFire.removeLocation(areaUID.get(positionOfItem));
+                areaList.remove(positionOfItem);
+                areaUID.remove(positionOfItem);
+                streetList.remove(positionOfItem);
+                arrayAdapter.notifyDataSetChanged();
                 break;
             case 21:
-
                 break;
         }
         switchViews(false);
@@ -219,7 +243,7 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
                         AngebotsGebiet newItem = item.getValue(AngebotsGebiet.class);
                         streetList.add(newItem.getStreet() + ", "
                                 + newItem.getZip() + " "
-                                + newItem.getCity() + "\n Radius: "
+                                + newItem.getCity() + "\nRadius: "
                                 + Double.toString(newItem.getRadiusInM() / 1000) + " km");
                         areaList.add(item.getValue(AngebotsGebiet.class));
                     }
@@ -229,7 +253,6 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
             }
         });
 
@@ -237,7 +260,7 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 AngebotsGebiet showItem = areaList.get(position);
-                drawLocationCircle(showItem);
+                addArea(addButton, showItem);
             }
         });
 
@@ -257,6 +280,5 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
-        mMap.getUiSettings().setCompassEnabled(true);
     }
 }

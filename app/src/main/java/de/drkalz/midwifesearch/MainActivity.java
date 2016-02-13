@@ -1,9 +1,8 @@
 package de.drkalz.midwifesearch;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,10 +21,17 @@ import de.drkalz.midwifesearch.Midwifes.Service;
 import de.drkalz.midwifesearch.Midwifes.SetBlockedTime;
 import de.drkalz.midwifesearch.Pregnants.MapRequest;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     final StartApplication sApp = StartApplication.getInstance();
     Firebase ref;
+
+    ImageButton ibArea;
+    ImageButton ibTime;
+    ImageButton ibService;
+    ImageButton ibSearch;
+    Button buLogout;
+    TextView tvUser;
 
     public void doSomeAction(View view) {
 
@@ -87,17 +93,14 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //bsetSupportActionBar(toolbar);
 
+        ibArea = (ImageButton) findViewById(R.id.ib_Area);
+        ibTime = (ImageButton) findViewById(R.id.ib_Abwesenheit);
+        ibService = (ImageButton) findViewById(R.id.ib_Service);
+        ibSearch = (ImageButton) findViewById(R.id.ib_search);
+        buLogout = (Button) findViewById(R.id.bu_logout);
+        tvUser = (TextView) findViewById(R.id.tv_User);
         sApp.setMidwife(false);
-
-        final ImageButton ibArea = (ImageButton) findViewById(R.id.ib_Area);
-        final ImageButton ibTime = (ImageButton) findViewById(R.id.ib_Abwesenheit);
-        final ImageButton ibService = (ImageButton) findViewById(R.id.ib_Service);
-        final ImageButton ibSearch = (ImageButton) findViewById(R.id.ib_search);
-        final Button buLogout = (Button) findViewById(R.id.bu_logout);
-        final TextView tvUser = (TextView) findViewById(R.id.tv_User);
 
         Firebase.setAndroidContext(this);
         ref = new Firebase("https://midwife-search.firebaseio.com/");
@@ -114,6 +117,7 @@ public class MainActivity extends Activity {
                         User currentUser = dataSnapshot.getValue(User.class);
                         tvUser.setText("- " + currentUser.getFirstname() + " " + currentUser.getLastname() + " -");
                         sApp.setUserEmail(currentUser.geteMail());
+                        sApp.setFullUserName(currentUser.getFirstname() + " " + currentUser.getLastname());
                         if (currentUser.getIsMidwife() == false) {
                             sApp.setMidwife(false);
                         } else {
@@ -155,4 +159,9 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        tvUser.setText("- " + sApp.getFullUserName() + " -");
+    }
 }

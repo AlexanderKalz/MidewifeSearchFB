@@ -14,7 +14,6 @@ import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
@@ -33,27 +32,26 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         final StartApplication sApp = StartApplication.getInstance();
 
         final EditText userEmail = (EditText) findViewById(R.id.et_email);
         final EditText userPassword = (EditText) findViewById(R.id.et_password);
         final Button loginButton = (Button) findViewById(R.id.bu_login);
         TextView registerUser = (TextView) findViewById(R.id.tv_register);
+        final Firebase ref = new Firebase("https://midwife-search.firebaseio.com/");
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String email = userEmail.getText().toString();
                 final String password = userPassword.getText().toString();
-                Firebase ref = new Firebase("https://midwife-search.firebaseio.com/");
                 ref.authWithPassword(email, password, new Firebase.AuthResultHandler() {
                     @Override
                     public void onAuthenticated(AuthData authData) {
-                        Firebase refUser = new Firebase("https://midwife-search.firebaseio.com/Users");
-                        Query queryUser = refUser.child(authData.getUid());
-                        queryUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                        Firebase refUser = new Firebase("https://midwife-search.firebaseio.com/Users").child(authData.getUid());
+                        refUser.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.exists()) {

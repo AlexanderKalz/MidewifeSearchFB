@@ -7,4 +7,5 @@
     <string name="title_activity_set_blocked_time">Abwesenheiten planen</string>
     <string name="welcomeApp">Herzlich Willkommen!</string>
     <string name="title_activity_midwife_area">Wo kann man mich buchen?</string>
+    <string name="tvstrasse">Straße:</string>
 </resources>

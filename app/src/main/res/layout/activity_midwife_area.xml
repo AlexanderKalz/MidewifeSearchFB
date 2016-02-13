@@ -21,7 +21,6 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="60dp"
             android:layout_marginTop="30dp"
-            android:layout_weight="1"
             android:visibility="visible" />
 
         <ImageButton
@@ -68,7 +67,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_row="0"
-                android:text="Straße:"
+                android:text="@string/tvstrasse"
                 android:textColor="#000000"
                 android:textSize="16sp" />
 
@@ -220,9 +219,10 @@
                 android:layout_below="@+id/tv_ChangeDeleteArea"
                 android:layout_marginStart="40dp"
                 android:layout_marginTop="34dp"
-                android:onClick="changeDeleteArea"
+                android:nestedScrollingEnabled="true"
+                android:onClick="deleteArea"
                 android:tag="20"
-                android:text="Ändern"/>
+                android:text="Löschen" />
 
             <Button
                 android:id="@+id/bu_DelteArea"
@@ -230,17 +230,17 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/bu_ChangeArea"
                 android:layout_alignEnd="@+id/tv_ChangeDeleteArea"
-                android:onClick="changeDeleteArea"
+                android:onClick="deleteArea"
                 android:tag="21"
-                android:text="Löschen"/>
+                android:text="Abbrechen" />
         </RelativeLayout>
 
     </RelativeLayout>
 
-    <fragment android:id="@+id/map"
-              android:name="com.google.android.gms.maps.SupportMapFragment"
-              xmlns:android="http://schemas.android.com/apk/res/android"
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:layout_weight="50"

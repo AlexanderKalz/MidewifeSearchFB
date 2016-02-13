@@ -110,6 +110,7 @@ public class Register extends AppCompatActivity {
                 String passWord = cuPassword.getText().toString();
 
                 final Firebase ref = new Firebase("https://midwife-search.firebaseio.com/");
+
                 ref.createUser(eMail, passWord, new Firebase.ValueResultHandler<Map<String, Object>>() {
                     @Override
                     public void onSuccess(Map<String, Object> newUser) {
