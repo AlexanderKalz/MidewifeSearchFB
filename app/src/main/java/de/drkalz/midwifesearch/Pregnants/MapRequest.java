@@ -167,6 +167,7 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     saveRequest();
+
                 } else {
                     refRequest.child(requesterID).removeValue();
                     geoFire.removeLocation(requesterID);

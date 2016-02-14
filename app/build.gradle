@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'AlexandersAndroidSchlüssel'
+            keyPassword 'highnoon73'
+            storeFile file('/Users/Alex/AndroidStudioProjects/android.jks')
+            storePassword 'highnoon73'
+        }
+    }
     compileSdkVersion 'Google Inc.:Google APIs:23'
     buildToolsVersion "23.0.2"
     defaultConfig {
@@ -14,6 +22,8 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+            proguardFile '/Users/Alex/Library/Android/sdk/tools/proguard/proguard-android.txt'
         }
         debug {
         }

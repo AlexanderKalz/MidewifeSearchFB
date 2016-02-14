@@ -31,7 +31,6 @@
             android:layout_alignParentEnd="false"
             android:layout_alignParentRight="true"
             android:layout_gravity="center"
-            android:onClick="addArea"
             android:src="@android:drawable/ic_menu_add"
             android:tag="1"
             android:visibility="visible" />
@@ -206,7 +205,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
-                android:text="Möchten Sie den Eintrag ändern oder löschen?"
+                android:text="Möchten Sie den Eintrag endgültig löschen?"
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="20sp"/>

@@ -86,8 +86,9 @@ public class SetBlockedTime extends AppCompatActivity {
                     public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                         if (firebaseError == null) {
                             Toast.makeText(getApplicationContext(), "gespeichert", Toast.LENGTH_LONG).show();
-                            savedBlock.add(startDate.getText().toString() + " - " + stopDate.getText().toString());
+                            savedBlock.add("Start: " + sdf.format(startOfBlock) + " - Ende: " + sdf.format(endOfBlock));
                             savedUID.add(firebase.getKey());
+                            arrayAdapter.notifyDataSetChanged();
                         }
                     }
                 });
@@ -101,12 +102,14 @@ public class SetBlockedTime extends AppCompatActivity {
                 updateRef.setValue(newBlock);
                 updateRef.child("endOfBlock").setValue(endOfBlock);
                 savedBlock.set(positionOfItem, "Start: " + sdf.format(startOfBlock) + " - Ende: " + sdf.format(endOfBlock));
+                arrayAdapter.notifyDataSetChanged();
                 break;
             // delete item
             case 3:
                 ref.child(savedUID.get(positionOfItem)).removeValue();
                 savedBlock.remove(positionOfItem);
                 savedUID.remove(positionOfItem);
+                arrayAdapter.notifyDataSetChanged();
                 break;
         }
     }
@@ -147,7 +150,6 @@ public class SetBlockedTime extends AppCompatActivity {
                     savedBlock.clear();
                     savedUID.clear();
                 }
-                arrayAdapter.notifyDataSetChanged();
             }
 
             @Override
