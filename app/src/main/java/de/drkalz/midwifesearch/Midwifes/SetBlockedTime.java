@@ -150,6 +150,7 @@ public class SetBlockedTime extends AppCompatActivity {
                     savedBlock.clear();
                     savedUID.clear();
                 }
+                arrayAdapter.notifyDataSetChanged();
             }
 
             @Override

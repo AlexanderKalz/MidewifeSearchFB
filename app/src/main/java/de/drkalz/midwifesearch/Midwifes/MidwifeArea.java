@@ -90,6 +90,7 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
     }
 
     protected void drawLocationCircle(AngebotsGebiet newArea, int pos) {
+
         String address = newArea.getStreet() + " " + newArea.getCity() + " "
                 + newArea.getCountry() + " " + newArea.getZip();
 
@@ -103,23 +104,25 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         LatLng latLng = new LatLng(lat, lng);
-        if (pos > -1) {
-            markers.get(pos).isVisible();
-            markers.get(pos).remove();
-            circles.get(pos).remove();
-        }
         Marker marker = mMap.addMarker(new MarkerOptions().position(latLng).title(newArea.getStreet()));
         Circle circle = mMap.addCircle(new CircleOptions()
                 .center(new LatLng(lat, lng))
                 .radius(newArea.getRadiusInM())
                 .strokeColor(Color.BLUE));
+
         if (pos == -1) {
             markers.add(marker);
             circles.add(circle);
+        } else if (pos == -2) {
+
+
         } else {
+            Marker changeMarker = markers.get(pos);
+            changeMarker.remove();
             markers.set(pos, marker);
+            Circle changeCircle = circles.get(pos);
+            changeCircle.remove();
             circles.set(pos, circle);
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, getZoomLevel(circle) - 1));
@@ -138,6 +141,7 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
             etZip.setText(uebergabeGebiet.getZip());
             etRadius.setText(String.valueOf(uebergabeGebiet.getRadiusInM() / 1000));
             addOrUpdate = false;
+            drawLocationCircle(uebergabeGebiet, -2);
         }
 
         switchViews(true);
@@ -176,8 +180,8 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
                                             + gebiet.getZip() + " "
                                             + gebiet.getCity() + "\nRadius: "
                                             + Double.toString(gebiet.getRadiusInM() / 1000) + " km");
-                                    geoFire.setLocation(firebase.getKey(), new GeoLocation(lat, lng));
                                     drawLocationCircle(gebiet, -1);
+                                    geoFire.setLocation(firebase.getKey(), new GeoLocation(lat, lng));
                                 }
                             }
                         });
@@ -190,6 +194,7 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
                                 + gebiet.getCity() + "\nRadius: "
                                 + Double.toString(gebiet.getRadiusInM() / 1000) + " km");
                         drawLocationCircle(gebiet, positionOfItem);
+                        geoFire.setLocation(areaUID.get(positionOfItem), new GeoLocation(lat, lng));
                     }
                     arrayAdapter.notifyDataSetChanged();
                     switchViews(false);
@@ -208,6 +213,8 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
             areaList.remove(positionOfItem);
             areaUID.remove(positionOfItem);
             streetList.remove(positionOfItem);
+            markers.remove(positionOfItem);
+            circles.remove(positionOfItem);
             arrayAdapter.notifyDataSetChanged();
         }
         switchViews(false);

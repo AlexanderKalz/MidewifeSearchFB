@@ -79,7 +79,7 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
         geoFire = new GeoFire(new Firebase("https://midwife-search.firebaseio.com/Location/Requests"));
 
         Query query = refRequest.orderByChild(requesterID).limitToLast(1);
-        refRequest.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
