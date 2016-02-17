@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -27,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import de.drkalz.midwifesearch.MainActivity;
 import de.drkalz.midwifesearch.R;
 
 public class SetBlockedTime extends AppCompatActivity {
@@ -39,7 +39,7 @@ public class SetBlockedTime extends AppCompatActivity {
     ListView showBlockedDates;
     EditText startDate, stopDate;
     Button addBlock;
-    ImageButton saveButton;
+    ImageButton saveButton, endActivity;
     Date startOfBlock, endOfBlock;
     Firebase ref;
     boolean addItem;
@@ -118,10 +118,6 @@ public class SetBlockedTime extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_blocked_time);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent inputIntent = getIntent();
 
@@ -132,6 +128,7 @@ public class SetBlockedTime extends AppCompatActivity {
         addBlock = (Button) findViewById(R.id.bu_addTime);
         saveButton = (ImageButton) findViewById(R.id.ib_Save);
         saveButton.setVisibility(View.INVISIBLE);
+        endActivity = (ImageButton) findViewById(R.id.ib_goBack);
 
         arrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, savedBlock);
         showBlockedDates.setAdapter(arrayAdapter);
@@ -215,5 +212,13 @@ public class SetBlockedTime extends AppCompatActivity {
             }
         });
 
+        endActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
     }
 }

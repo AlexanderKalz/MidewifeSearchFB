@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
 import de.drkalz.midwifesearch.Midwifes.MidwifeArea;
@@ -108,9 +107,8 @@ public class MainActivity extends AppCompatActivity {
         sApp.setAuthData(ref.getAuth());
 
         if (sApp.getAuthData() != null) {
-            Firebase users = new Firebase("https://midwife-search.firebaseio.com/Users");
-            Query query = users.child(sApp.getAuthData().getUid());
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
+            Firebase users = new Firebase("https://midwife-search.firebaseio.com/Users").child(sApp.getAuthData().getUid());
+            users.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
@@ -120,12 +118,12 @@ public class MainActivity extends AppCompatActivity {
                         sApp.setFullUserName(currentUser.getFirstname() + " " + currentUser.getLastname());
                         if (currentUser.getIsMidwife() == false) {
                             sApp.setMidwife(false);
+
                         } else {
                             sApp.setMidwife(true);
                         }
                     }
                 }
-
                 @Override
                 public void onCancelled(FirebaseError firebaseError) {
 

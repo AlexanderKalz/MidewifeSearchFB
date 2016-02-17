@@ -8,8 +8,10 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import de.drkalz.midwifesearch.MainActivity;
 import de.drkalz.midwifesearch.R;
@@ -36,12 +38,40 @@ public class Service extends AppCompatActivity {
         final CheckBox cb_spanish = (CheckBox) findViewById(R.id.cb_spanish);
         final CheckBox cb_german = (CheckBox) findViewById(R.id.cb_german);
 
+        final Intent i = getIntent();
+        final Firebase refService = new Firebase("https://midwife-search.firebaseio.com/ServicePortfolio");
+
+        refService.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot item : dataSnapshot.getChildren()) {
+                        ServicePortfolio currentPortfolio = item.getValue(ServicePortfolio.class);
+                        cb_belegeburt.setChecked(currentPortfolio.isBeleggeburt());
+                        cb_geburthge.setChecked(currentPortfolio.isGeburt_hge());
+                        cb_geburtsvorbereitung.setChecked(currentPortfolio.isGeburtsvorbereitung());
+                        cb_hausgeburt.setChecked(currentPortfolio.isHausgeburt());
+                        cb_schwangerenvorsorge.setChecked(currentPortfolio.isSchwangerenvorsorge());
+                        cb_rueckbildung.setChecked(currentPortfolio.isRueckbildungskurs());
+                        cb_wochenbett.setChecked(currentPortfolio.isWochenbetreueung());
+                        cb_english.setChecked(currentPortfolio.isEnglish());
+                        cb_french.setChecked(currentPortfolio.isFrench());
+                        cb_spanish.setChecked(currentPortfolio.isSpanish());
+                        cb_german.setChecked(currentPortfolio.isGerman());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
         addServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ServicePortfolio servicePortfolio = new ServicePortfolio();
-                final Intent i = getIntent();
-
                 servicePortfolio.setBeleggeburt(cb_belegeburt.isChecked());
                 servicePortfolio.setGeburt_hge(cb_geburthge.isChecked());
                 servicePortfolio.setGeburtsvorbereitung(cb_geburtsvorbereitung.isChecked());
@@ -54,7 +84,6 @@ public class Service extends AppCompatActivity {
                 servicePortfolio.setSpanish(cb_spanish.isChecked());
                 servicePortfolio.setGerman(cb_german.isChecked());
 
-                Firebase refService = new Firebase("https://midwife-search.firebaseio.com/ServicePortfolio");
                 refService.child(i.getStringExtra("userUID")).setValue(servicePortfolio,
                         new Firebase.CompletionListener() {
                     @Override

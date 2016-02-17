@@ -110,6 +110,7 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
                 .center(new LatLng(lat, lng))
                 .radius(newArea.getRadiusInM())
                 .strokeColor(Color.BLUE));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, getZoomLevel(circle) - 1));
 
         if (pos == -1) {
             markers.add(marker);
@@ -125,7 +126,6 @@ public class MidwifeArea extends FragmentActivity implements OnMapReadyCallback 
             changeCircle.remove();
             circles.set(pos, circle);
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, getZoomLevel(circle) - 1));
     }
 
     public void addArea(final AngebotsGebiet uebergabeGebiet) {
