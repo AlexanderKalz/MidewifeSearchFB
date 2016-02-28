@@ -1,6 +1,7 @@
 package de.drkalz.midwifesearch;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -25,10 +26,8 @@ public class MainActivity extends AppCompatActivity {
     final StartApplication sApp = StartApplication.getInstance();
     Firebase ref;
 
-    ImageButton ibArea;
-    ImageButton ibTime;
-    ImageButton ibService;
-    ImageButton ibSearch;
+    ImageButton ibArea, ibTime, ibService, ibSearch;
+    TextView tvAbwesenheit, tvArea, tvService, tvSearch;
     Button buLogout;
     TextView tvUser;
 
@@ -44,7 +43,12 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-
+                    Intent intent = new Intent(MainActivity.this, Register.class);
+                    intent.putExtra("userUID", sApp.getAuthData().getUid());
+                    intent.putExtra("userPassword", sApp.getUserPassword());
+                    intent.putExtra("changeData", true);
+                    startActivity(intent);
+                    finish();
                 }
                 break;
             case 2:
@@ -98,6 +102,10 @@ public class MainActivity extends AppCompatActivity {
         ibService = (ImageButton) findViewById(R.id.ib_Service);
         ibSearch = (ImageButton) findViewById(R.id.ib_search);
         buLogout = (Button) findViewById(R.id.bu_logout);
+        tvAbwesenheit = (TextView) findViewById(R.id.tv_Abwesenheit);
+        tvArea = (TextView) findViewById(R.id.tv_Area);
+        tvService = (TextView) findViewById(R.id.tv_Service);
+        tvSearch = (TextView) findViewById(R.id.tv_Search);
         tvUser = (TextView) findViewById(R.id.tv_User);
         sApp.setMidwife(false);
 
@@ -118,9 +126,19 @@ public class MainActivity extends AppCompatActivity {
                         sApp.setFullUserName(currentUser.getFirstname() + " " + currentUser.getLastname());
                         if (currentUser.getIsMidwife() == false) {
                             sApp.setMidwife(false);
-
+                            tvAbwesenheit.setText("persönliche Daten ändern");
+                            tvArea.setText("Anfrage senden");
+                            tvSearch.setText("Suche Hebamme");
+                            tvService.setTextColor(Color.LTGRAY);
+                            ibService.setVisibility(View.INVISIBLE);
                         } else {
                             sApp.setMidwife(true);
+                            tvAbwesenheit.setText("Abwesenheiten planen");
+                            tvArea.setText("Gebiete festlegen");
+                            tvSearch.setText("Anfragen suchen");
+                            tvService.setText("Serviceportfolio ändern");
+                            tvService.setTextColor(Color.BLACK);
+                            ibService.setVisibility(View.VISIBLE);
                         }
                     }
                 }

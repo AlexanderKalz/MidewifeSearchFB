@@ -11,8 +11,10 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.firebase.client.AuthData;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.Map;
 
@@ -27,7 +29,7 @@ public class Register extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         ImageButton registerUser = (ImageButton) findViewById(R.id.fab);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().hide();
 
         final Boolean[] isMidwife = {false};
 
@@ -44,9 +46,38 @@ public class Register extends AppCompatActivity {
         final EditText cuPassword = (EditText) findViewById(R.id.et_password);
         final Switch cuIsMidwife = (Switch) findViewById(R.id.sw_isMidwife);
 
-        Intent i = getIntent();
+        final Intent i = getIntent();
+        final boolean changeData = i.getBooleanExtra("changeData", false);
         cuEmail.setText(i.getStringExtra("userEmail"));
         cuPassword.setText(i.getStringExtra("userPassword"));
+
+        if (changeData) {
+            String userUid = i.getStringExtra("userUID");
+            Firebase users = new Firebase("https://midwife-search.firebaseio.com/Users").child(userUid);
+            users.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        User currentUser = dataSnapshot.getValue(User.class);
+                        cuFirstname.setText(currentUser.getFirstname());
+                        cuName.setText(currentUser.getLastname());
+                        cuStreet.setText(currentUser.getStreet());
+                        cuZip.setText(currentUser.getZip());
+                        cuCity.setText(currentUser.getCity());
+                        cuCountry.setText(currentUser.getCountry());
+                        cuTelefon.setText(currentUser.getTelefon());
+                        cuMobil.setText(currentUser.getMobil());
+                        cuHomepage.setText(currentUser.getHomepage());
+                        cuIsMidwife.setChecked(currentUser.getIsMidwife());
+                        cuEmail.setText(currentUser.geteMail());
+                    }
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+                }
+            });
+        }
 
         cuIsMidwife.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -107,16 +138,18 @@ public class Register extends AppCompatActivity {
 
                 final Firebase ref = new Firebase("https://midwife-search.firebaseio.com/");
 
-                ref.createUser(eMail, passWord, new Firebase.ValueResultHandler<Map<String, Object>>() {
-                    @Override
-                    public void onSuccess(Map<String, Object> newUser) {
-                        Toast.makeText(getApplicationContext(), "Sie wurden registriert", Toast.LENGTH_SHORT).show();
-                    }
+                if (!changeData) {
+                    ref.createUser(eMail, passWord, new Firebase.ValueResultHandler<Map<String, Object>>() {
+                        @Override
+                        public void onSuccess(Map<String, Object> newUser) {
+                            Toast.makeText(getApplicationContext(), "Sie wurden registriert", Toast.LENGTH_SHORT).show();
+                        }
 
-                    @Override
-                    public void onError(FirebaseError firebaseError) {
-                    }
-                });
+                        @Override
+                        public void onError(FirebaseError firebaseError) {
+                        }
+                    });
+                }
 
                 ref.authWithPassword(eMail, passWord, new Firebase.AuthResultHandler() {
                     @Override
@@ -136,19 +169,24 @@ public class Register extends AppCompatActivity {
 
                         ref.child("Users").child(authData.getUid()).setValue(newUser);
 
-                        if (isMidwife[0]) {
-                            Intent i = new Intent(getApplicationContext(), Service.class);
-                            i.putExtra("userUID", authData.getUid());
-                            startActivity(i);
-                            finish();
+                        if (!changeData) {
+                            if (isMidwife[0]) {
+                                Intent i = new Intent(getApplicationContext(), Service.class);
+                                i.putExtra("userUID", authData.getUid());
+                                startActivity(i);
+                                finish();
+                            } else {
+                                Intent i = new Intent(getApplicationContext(), MapRequest.class);
+                                i.putExtra("userUID", authData.getUid());
+                                startActivity(i);
+                                finish();
+                            }
                         } else {
-                            Intent i = new Intent(getApplicationContext(), MapRequest.class);
-                            i.putExtra("userUID", authData.getUid());
+                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(i);
                             finish();
                         }
                     }
-
                     @Override
                     public void onAuthenticationError(FirebaseError firebaseError) {
                     }

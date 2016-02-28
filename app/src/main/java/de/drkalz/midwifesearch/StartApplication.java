@@ -13,6 +13,7 @@ public class StartApplication extends Application {
     private boolean isMidwife;
     private AuthData authData;
     private String userEmail;
+    private String userPassword;
     private String fullUserName;
 
     public static StartApplication getInstance() {
@@ -41,6 +42,14 @@ public class StartApplication extends Application {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
     public String getFullUserName() {

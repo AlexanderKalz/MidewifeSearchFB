@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
@@ -48,7 +47,7 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
     public void saveRequest() {
 
         Request newRequest = new Request();
-        newRequest.setDateOfBirth(newDate);
+        newRequest.setDateOfBirth(newDate.getTime());
         newRequest.setMidwifeID("");
 
         refRequest.child(requesterID).setValue(newRequest, new Firebase.CompletionListener() {
@@ -75,33 +74,30 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
         dateOfBirth = (CalendarView) findViewById(R.id.cv_dateOfBirth);
         sendRequest = (CheckBox) findViewById(R.id.cb_sendRequest);
 
-        refRequest = new Firebase("https://midwife-search.firebaseio.com/Request");
+        refRequest = new Firebase("https://midwife-search.firebaseio.com/Request").child(requesterID);
         geoFire = new GeoFire(new Firebase("https://midwife-search.firebaseio.com/Location/Requests"));
 
-        Query query = refRequest.child(requesterID).limitToLast(1);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        refRequest.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        Request knownRequest = snapshot.getValue(Request.class);
-                        if (knownRequest.getMidwifeID().isEmpty()) {
-                            geoFire.getLocation(requesterID, new LocationCallback() {
-                                @Override
-                                public void onLocationResult(String key, GeoLocation location) {
-                                    lat = location.latitude;
-                                    lng = location.longitude;
-                                }
+                    Request knownRequest = dataSnapshot.getValue(Request.class);
+                    if (knownRequest.getMidwifeID().isEmpty()) {
+                        geoFire.getLocation(requesterID, new LocationCallback() {
+                            @Override
+                            public void onLocationResult(String key, GeoLocation location) {
+                                lat = location.latitude;
+                                lng = location.longitude;
+                            }
 
-                                @Override
-                                public void onCancelled(FirebaseError firebaseError) {
-                                }
-                            });
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError) {
+                            }
+                        });
 
-                            newDate = knownRequest.getDateOfBirth();
-                            dateOfBirth.setDate(knownRequest.getDateOfBirth().getTime());
-                            sendRequest.setChecked(true);
-                        }
+                        newDate = new Date(knownRequest.getDateOfBirth());
+                        dateOfBirth.setDate((new Date(knownRequest.getDateOfBirth()).getTime()));
+                        sendRequest.setChecked(true);
                     }
                 }
             }

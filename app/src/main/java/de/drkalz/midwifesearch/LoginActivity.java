@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
                 final String password = userPassword.getText().toString();
                 ref.authWithPassword(email, password, new Firebase.AuthResultHandler() {
                     @Override
-                    public void onAuthenticated(AuthData authData) {
+                    public void onAuthenticated(final AuthData authData) {
                         Firebase refUser = new Firebase("https://midwife-search.firebaseio.com/Users").child(authData.getUid());
                         refUser.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -53,6 +53,9 @@ public class LoginActivity extends AppCompatActivity {
                                 if (dataSnapshot.exists()) {
                                     Toast.makeText(getApplicationContext(), "User " + email + " logged in",
                                             Toast.LENGTH_LONG).show();
+                                    sApp.setUserEmail(email);
+                                    sApp.setUserPassword(password);
+                                    sApp.setAuthData(authData);
                                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(i);
                                     finish();
