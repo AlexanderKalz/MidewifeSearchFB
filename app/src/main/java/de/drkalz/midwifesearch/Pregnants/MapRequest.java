@@ -77,8 +77,8 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
         refRequest = new Firebase("https://midwife-search.firebaseio.com/Request");
         geoFire = new GeoFire(new Firebase("https://midwife-search.firebaseio.com/Location/Requests"));
 
-        Query query = refRequest.
-        refRequest.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query query = refRequest.orderByKey().equalTo(requesterID);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
