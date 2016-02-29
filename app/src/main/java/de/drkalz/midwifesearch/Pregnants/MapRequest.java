@@ -74,9 +74,10 @@ public class MapRequest extends FragmentActivity implements OnMapReadyCallback {
         dateOfBirth = (CalendarView) findViewById(R.id.cv_dateOfBirth);
         sendRequest = (CheckBox) findViewById(R.id.cb_sendRequest);
 
-        refRequest = new Firebase("https://midwife-search.firebaseio.com/Request").child(requesterID);
+        refRequest = new Firebase("https://midwife-search.firebaseio.com/Request");
         geoFire = new GeoFire(new Firebase("https://midwife-search.firebaseio.com/Location/Requests"));
 
+        Query query = refRequest.
         refRequest.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
